@@ -69,6 +69,8 @@ class Decide {
 	          is fulfilled or not.
 	*/
 	public boolean LIC3(){
+		if(NUMPOINTS != X.length || NUMPOINTS != Y.length)
+			return false;
 		for(int i = 0; i < NUMPOINTS - 2; i++){
 			int first_point = i;
 			int second_point = i + 1;
@@ -89,7 +91,7 @@ class Decide {
 
 			// Heron's formula
 			double area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
-			if(area > AREA1){
+			if(area > PARAMETERS.AREA1){
 				return true;
 			}
 		}
