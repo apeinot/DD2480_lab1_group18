@@ -60,6 +60,32 @@ class Decide {
     public boolean[] CMV = new boolean[15];
     public boolean[] FUV = new boolean[15];
     public boolean LAUNCH;
+
+    /**
+    computePUM computes the array PUM according to the rules stated in the problem description
+    This method assumes that LCM and all CMVs are computed previous to its execution
+    */
+    public void computePUM(){
+        for(int i = 0; i < 15; i++){
+            for(int j = i + 1; j < 15; j++){
+                if(i == j){
+                    continue;
+                }
+                String val = LCM[i][j];
+                if(val.equals("ANDD")){
+                    PUM[i][j] = CMV[i] && CMV[j];
+                }
+                else if(val.equals("ORR")){
+                    PUM[i][j] = CMV[i] || CMV[j];
+                }
+                else{
+                    PUM[i][j] = true;
+                }
+                // it is a symmetric matrix
+                PUM[j][i] = PUM[i][j];
+            }
+        }
+    }
 	
 	
     public void decide(){
