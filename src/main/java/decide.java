@@ -60,6 +60,24 @@ class Decide {
     public boolean[] CMV = new boolean[15];
     public boolean[] FUV = new boolean[15];
     public boolean LAUNCH;
+
+    public boolean LIC0()
+    {
+    /* Computation of the LIC number 0
+     * Return True if the condition is raised (otherwise False)
+    */
+	double dist = 0;
+	for (int i=1; i<NUMPOINTS; i++)
+	{
+		dist = Math.sqrt((X[i]-X[i-1])*(X[i]-X[i-1]) + (Y[i] - Y[i-1])*(Y[i] - Y[i-1]));
+		if (dist > PARAMETERS.LENGTH1)
+		{
+			return true;
+		}
+	}
+
+	return false;
+    }
 	
 	
     public void decide(){
