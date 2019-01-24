@@ -62,7 +62,7 @@ class Decide {
     public boolean LAUNCH;
 
     /**
-    computePUM computes the array PUM according to the rules stated in the problem description
+    computePUM calculates the array PUM according to the rules stated in the problem description
     This method assumes that LCM and all CMVs are computed previous to its execution
     */
     public void computePUM(){
