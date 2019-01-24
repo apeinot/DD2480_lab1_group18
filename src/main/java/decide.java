@@ -61,11 +61,15 @@ class Decide {
     public boolean[] FUV = new boolean[15];
     public boolean LAUNCH;
 
+
+    /* 
+    Computation of the LIC number 0
+    Assess whether there exist at least one set of two consecutive data points which the distance
+    between them is greater than LENGTH1.
+    @return - true if the condition is fulfilled (otherwise False)
+    */
     public boolean LIC0()
     {
-    /* Computation of the LIC number 0
-     * Return True if the condition is raised (otherwise False)
-    */
 	double dist = 0;
 	for (int i=1; i<NUMPOINTS; i++)
 	{
