@@ -102,18 +102,25 @@ class Decide {
 		double d13 = Math.sqrt(Math.pow(x[0]-x[2],2)+Math.pow(y[0]-y[2],2));
 		double d23 = Math.sqrt(Math.pow(x[1]-x[2],2)+Math.pow(y[1]-y[2],2));
 		if (Math.abs(d12) < TOL || Math.abs(d13) < TOL || Math.abs(d23) < TOL){
+			//If two points coincide with each other, the smallest circle will have a diameter
+			//equal to the distance between the other two points.
 			r = Math.max(Math.max(d12,d13),d23)/2;
 		} else {
+			//Calculate the angles of the triangle the three points create
 			double v1 = Math.acos(((x[1]-x[0])*(x[2]-x[0])+(y[1]-y[0])*(y[2]-y[0]))/(d12*d13));
 			double v2 = Math.acos(((x[2]-x[1])*(x[0]-x[1])+(y[2]-y[1])*(y[0]-y[1]))/(d12*d23));
 			double v3 = Math.acos(((x[0]-x[2])*(x[1]-x[2])+(y[0]-y[2])*(y[1]-y[2]))/(d13*d23));
 			if (Math.toDegrees(Math.max(Math.max(v1,v2),v3)) < 90){
+				//For an acute triangle the smallest circle will be the circumscribed circle
+				//of the triangle
 				double sa = (y[1]-y[0])/(x[1]-x[0]);
 				double sb = (y[2]-y[1])/(x[2]-x[1]);
 				double cx = (sa*sb*(y[0]-y[2])+sb*(x[0]+x[1])-sa*(x[1]+x[2])/(2*sb-sa));
 				double cy = -1*(cx-(x[0]+x[1])/2)/sa+(y[0]+y[1])/2;
 				r = Math.sqrt(Math.pow(cx-x[0],2)+Math.pow(cy-y[0],2));
 			} else {
+				//The smallest circle that encloses a right or obtuse triangle has its
+				//diameter equal to the longest side of the triangle
 				r = Math.max(Math.max(d12,d13),d23)/2;
 			}
 		}
