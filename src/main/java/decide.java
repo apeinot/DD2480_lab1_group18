@@ -148,6 +148,21 @@ class Decide {
 	return r > rad;
     }
 
+    /**
+    Function that calculates sets the global variable LAUNCH
+    The variable LAUNCH is set to true if and only if all entries of FUV are true
+    Otherwise LAUNCH will be false of the execution of computeLAUNCH
+    computeLAUNCH requires FUV to be filled with correct values
+    */
+    public void computeLAUNCH(){
+        LAUNCH = true;
+        //LAUNCH will only be true after the for loop if all entries of FUV are true
+        for(int i = 0; i < 15; i++){
+            LAUNCH = LAUNCH && FUV[i];
+        }
+
+    }
+
 	
     public void decide(){
 

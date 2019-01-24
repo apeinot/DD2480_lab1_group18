@@ -57,4 +57,28 @@ public class DecideTest {
         assertEquals(system.LIC0(), false);
     }
 
+    @Test
+    /**
+    Test case for computeLAUNCH function of Decide.java. This case evaluates
+    two scenarios. First, there is a case where all entries of FUV are true
+    and therefore LAUNCH should also be true. In the second case, one entry
+    (in this case the fourth entry) of FUV is set to false and therefore
+    LAUNCH should alse be false.
+    */
+    public void testComputeLAUNCH(){
+        Decide decide = new Decide();
+
+        // test if all entries of FUV are true
+        for(int i = 0; i < 15; i++){
+            decide.FUV[i] = true;
+        }
+        decide.computeLAUNCH();
+        assertEquals(decide.LAUNCH, true);
+
+        // test if not all entries of FUV are true
+        decide.FUV[4] = false;
+        decide.computeLAUNCH();
+        assertEquals(decide.LAUNCH, false);
+    }
+
 }
