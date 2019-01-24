@@ -107,8 +107,11 @@ class Decide {
 		double lineSqrd = Math.pow(lx-fx,2)+Math.pow(ly-fy,2);
 		for (int i = 1; i < x.length-1; i++){
 			if (lineSqrd < TOL){
+				// The first and last point coincide
 				d = Math.pow(fx-x[i],2)+Math.pow(fy-y[i],2);
 			} else {
+				//t is how far down the line the projection falls, values above
+				//1 or below 0 being further than either endpoint
 				double t = ((x[i]-fx)*(lx-fx)+(y[i]-fy)*(ly-fy))/lineSqrd;
 				t = Math.max(0, Math.min(1,t));
 				double px = fx + t * (lx-fx);
