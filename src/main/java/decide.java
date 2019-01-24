@@ -68,10 +68,8 @@ class Decide {
     public void computePUM(){
         for(int i = 0; i < 15; i++){
             for(int j = i + 1; j < 15; j++){
-                if(i == j){
-                    continue;
-                }
                 String val = LCM[i][j];
+                // apply the corresponding operation
                 if(val.equals("ANDD")){
                     PUM[i][j] = CMV[i] && CMV[j];
                 }
