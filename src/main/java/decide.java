@@ -63,7 +63,7 @@ class Decide {
     public boolean LAUNCH;
 
     /**
-    computePUM computes the vector FUV according to the rules stated in the problem description
+    computePUM calculates the vector FUV according to the rules stated in the problem description
     This method assumes that PUM and PUV are present previous to its execution
     */
     public void computeFUV(){
