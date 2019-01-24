@@ -148,7 +148,47 @@ class Decide {
 	return r > rad;
     }
 
-	
+	/**
+	Find whether or not there exists two sets of three points, both with
+	A_PTS and B_PTS between the first and second and second and third point
+	respectively, where the first set cannot be contained in a circle with
+	radius RADIUS1, whereas the second set can be contained in a circle with
+	radius RADIUS2.  Uses helper function lic1Calculator
+	@return true if both conditions are met
+	*/
+	public boolean lic13(){
+		if (NUMPOINTS < 5 || PARAMETERS.A_PTS < 1 || PARAMETERS.B_PTS < 1){
+			return false;
+		}
+		double rad1 = PARAMETERS.RADIUS1;
+		double rad2 = PARAMETERS.RADIUS2;
+		double[] x = new double[3];
+		double[] y = new double[3];
+		int adist = PARAMETERS.A_PTS;
+		int bdist = PARAMETERS.B_PTS;
+		boolean res1 = false;
+		boolean res2 = false;
+		for (int i = 0; i < NUMPOINTS-adist-bdist-2; i++){
+			x[0] = X[i];
+			x[1] = X[i+adist];
+			x[2] = X[i+adist+bdist+1];
+			y[0] = Y[i];
+			y[1] = Y[i+adist];
+			y[2] = Y[i+adist+bdist+1];
+			if(!res1){
+				res1 = lic1Calculator(rad1, x, y);
+			}
+			if(!res2){
+				res2 = !lic1Calculator(rad2, x, y);
+			}
+			if (res1 && res2) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
     public void decide(){
 
     }
