@@ -95,12 +95,13 @@ class Decide {
 	@param y array of y coordinates
 	@return true if circle cannot contain the three points
 	*/
-	public boolean lic1Calculator(double rad, double[] x, double[] y) {
+	public boolean lic1Calculator(double rad, double[] x, double[] y){
+		double TOL = 0.000001;
 		double r;
 		double d12 = Math.sqrt(Math.pow(x[0]-x[1],2)+Math.pow(y[0]-y[1],2));
 		double d13 = Math.sqrt(Math.pow(x[0]-x[2],2)+Math.pow(y[0]-y[2],2));
 		double d23 = Math.sqrt(Math.pow(x[1]-x[2],2)+Math.pow(y[1]-y[2],2));
-		if (d12 == 0 || d13 == 0 || d23 == 0) {
+		if (Math.abs(d12) < TOL || Math.abs(d13) < TOL || Math.abs(d23) < TOL){
 			r = Math.max(Math.max(d12,d13),d23)/2;
 		} else {
 			double v1 = Math.acos(((x[1]-x[0])*(x[2]-x[0])+(y[1]-y[0])*(y[2]-y[0]))/(d12*d13));
