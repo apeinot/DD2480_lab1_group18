@@ -33,6 +33,7 @@ public class DecideTest {
         d.Y = new double[]{23, -7, 12, 15, 10};
         d.PARAMETERS.RADIUS1=15;
         assertEquals(d.lic1(), false);
+    }
 
     /**
     Test for lic6(). In the first case the furthest point is (1,-2) and the line
