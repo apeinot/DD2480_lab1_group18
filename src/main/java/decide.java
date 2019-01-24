@@ -105,12 +105,11 @@ class Decide {
 		double lx = x[x.length-1];
 		double ly = y[y.length-1];
 		double lineSqrd = Math.pow(lx-fx,2)+Math.pow(ly-fy,2);
-		double t = 0.5;
 		for (int i = 1; i < x.length-1; i++){
 			if (lineSqrd < TOL){
 				d = Math.pow(fx-x[i],2)+Math.pow(fy-y[i],2);
 			} else {
-				t = ((x[i]-fx)*(lx-fx)+(y[i]-fy)*(ly-fy))/lineSqrd;
+				double t = ((x[i]-fx)*(lx-fx)+(y[i]-fy)*(ly-fy))/lineSqrd;
 				t = Math.max(0, Math.min(1,t));
 				double px = fx + t * (lx-fx);
 				double py = fy + t * (ly-fy);
