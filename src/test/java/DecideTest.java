@@ -35,7 +35,7 @@ public class DecideTest {
     }
 
     /**
-    Test for LIC 1. First case should result in true, as the radius 15 is too small, whereas
+    Test for LIC 13. First case should result in true, as the radius 15 is too small, whereas
     20 is enough to cover a set of three points.
     */
     @Test
@@ -52,7 +52,7 @@ public class DecideTest {
 
         d.NUMPOINTS = 7;
         d.X = new double[]{0,-10,30,29,13,40,2};
-        d.Y = new double[]{0,27,0,44,16,22,15};
+        d.Y = new double[]{0,27,0,44,70,22,15};
         d.PARAMETERS.A_PTS = 1;
         d.PARAMETERS.B_PTS = 1;
         d.PARAMETERS.RADIUS1=15;
