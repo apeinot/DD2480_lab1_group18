@@ -11,6 +11,13 @@ public class DecideTest {
     }
 
     @Test
+    /**
+    Test case for the computeFUV function of Decide.java.
+    Expected values of the FUV cells are:
+    [0]  - false, since PUM[0][1] is false
+    [4]  - true, since all PUM cells in the fourth row are true
+    [12] - true, since PUV[4] is true
+    */
     public void testComputeFUV(){
         Decide decide = new Decide();
         for(int i = 0; i < 15; i++){
