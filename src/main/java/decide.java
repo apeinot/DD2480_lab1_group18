@@ -149,10 +149,9 @@ class Decide {
     }
 
     /**
-    Function that calculates sets the global variable LAUNCH
-    The variable LAUNCH is set to true if and only if all entries of FUV are true
-    Otherwise LAUNCH will be false of the execution of computeLAUNCH
-    computeLAUNCH requires FUV to be filled with correct values
+    Sets the global variable LAUNCH to true if and only if all entries of FUV
+    are true, otherwise LAUNCH will be false after the execution of computeLAUNCH.
+    computeLAUNCH requires FUV to be previously filled with correct values
     */
     public void computeLAUNCH(){
         LAUNCH = true;
