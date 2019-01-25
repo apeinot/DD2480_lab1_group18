@@ -37,6 +37,67 @@ public class DecideTest {
         assertEquals(d.lic1(), false);
     }
 
+
+    /**
+    Test for LIC9. Should return false as input data is bad
+    */
+    @Test
+    public void testLIC9_1(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 4;
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.AREA1=10;
+        assertEquals(d.LIC9(), false); //NUMPOINTS < 5.
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.C_PTS = 0;
+        assertEquals(d.LIC9(), false);//1 ≤ C_PTS
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 0;
+        assertEquals(d.LIC9(), false);//1 ≤ D_PTS
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.D_PTS = 2;
+        assertEquals(d.LIC9(), false);//E PTS+F PTS ≤ NUMPOINTS−3
+    }
+
+    /**
+    Test for LIC9. Expected result true and false since espilon changes to large number
+    */
+    @Test
+    public void testLIC9_2(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.EPSILON = 1;
+        d.X = new double[]{0,0,0,0,10};
+        d.Y = new double[]{10,0,0,0,0};
+        assertEquals(d.LIC9(), true);
+        d.PARAMETERS.EPSILON = 10;
+        assertEquals(d.LIC9(), false);
+    }
+
+    /**
+    Test for LIC9. Expected result true,false,true since C_PTS and D_PTS change accordingly
+    */
+    @Test
+    public void testLIC9_3(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 10;
+        d.PARAMETERS.C_PTS = 2;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.EPSILON = 1;
+        d.X = new double[]{1,0,1,1,0,1,10,1,1,1};
+        d.Y = new double[]{1,10,1,1,0,1,0,1,1,1};
+        assertEquals(d.LIC9(), true);
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 2;
+        d.X = new double[]{1,0,1,0,1,1,10,1,1,1};
+        d.Y = new double[]{1,10,1,0,1,1,0,1,1,1};
+        assertEquals(d.LIC9(), true);
+
+    }
+
     /**
     Test for LIC 13. First case should result in true, as the radius 15 is too small, whereas
     20 is enough to cover a set of three points.
