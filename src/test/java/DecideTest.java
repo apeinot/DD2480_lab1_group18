@@ -57,4 +57,30 @@ public class DecideTest {
         assertEquals(system.LIC0(), false);
     }
 
+    @Test
+    /**
+    Test case for LIC2 function of Decide.java. This test case evaluates
+    whether LIC2 returns true if the angle is close to 0 or close to 2*PI
+    and whether it returns false if the angle is PI 
+    */
+    public void testLIC2(){
+        Decide decide = new Decide();
+        decide.NUMPOINTS = 3;
+
+        // points will give an angle that is close to 0
+        decide.X = new double[]{3,0,1};
+        decide.Y = new double[]{7,0,5};
+        assertEquals(decide.LIC2(),true);
+
+        // points will give an angle that is close to 2*PI
+        decide.X = new double[]{1,0,3};
+        decide.Y = new double[]{5,0,7};
+        assertEquals(decide.LIC2(),true);
+
+        // points will give an angle of PI
+        decide.X = new double[]{1,0,-1};
+        decide.Y = new double[]{0,0,0};
+        assertEquals(decide.LIC2(),false);
+    }
+
 }

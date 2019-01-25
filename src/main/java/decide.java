@@ -148,6 +148,48 @@ class Decide {
 	return r > rad;
     }
 
+    /**
+    Checks if there are three consecutive points that form an angle greater
+    than (PI + EPSILON) or less than (PI - EPSILON) where the second point
+    is the vertex of the angle
+    @return true if angle < (PI - EPSILON) or angle > (PI + EPSILON)
+    */
+    public boolean LIC2(){
+
+        for(int i = 0; i < NUMPOINTS - 2; i++){
+            double X1 = X[i], Y1 = Y[i];
+            double X2 = X[i+1], Y2 = Y[i+1];
+            double X3 = X[i+2], Y3 = Y[i+2];
+
+            // first and third point must not coincide with the second point
+            if((X1 == X2 && Y1 == Y2) || (X3 == X2 && Y3 == Y2)){
+                continue;
+            }
+
+            // construct both vectors
+            double v1[] = {X1 - X2, Y1 - Y2};
+            double v2[] = {X3 - X2, Y3 - Y2};
+
+            // calculate angle via the cosine formula
+            double numerator = v1[0] * v2[0] + v1[1] * v2[1];
+            double denominator = Math.sqrt(v1[0] * v1[0] + v1[1] * v1[1]) * Math.sqrt(v2[0] * v2[0] + v2[1] * v2[1]);
+            double angle = Math.acos(numerator/denominator);
+
+            // check whether the angle is correct (acos only measures from 0 to PI, but angle can be 0 to 2*PI)
+            double cross_product = v1[0] * v2[1] - v1[1] * v2[0];
+            if(cross_product < 0){
+                angle = 2*PI - angle;
+            }
+
+            // returns true according to the specification of the task assignment
+            if((angle < (PI - PARAMETERS.EPSILON)) || (angle > (PI + PARAMETERS.EPSILON))){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
 	
     public void decide(){
 
