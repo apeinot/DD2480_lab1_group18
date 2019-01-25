@@ -204,4 +204,33 @@ public class DecideTest {
         assertEquals(system.LIC0(), false);
     }
 
+    /**
+    Test case for LIC 11. First case should result in true. Other cases should result in false
+    */
+    @Test
+    public void testLIC11() {
+    // Test of the LIC number 11 in a case where the condition should be triggered (true)
+        Decide system = new Decide();
+	system.PARAMETERS.G_PTS = 3;
+        system.NUMPOINTS = 5;
+        system.X = new double[] {200, 20, 2, 0, 102};
+        system.Y = new double[] {1, 10, 3, 0, 0};
+        assertEquals(system.LIC11(), true);
+
+
+    // Test of the LIC number 11 in a case where the condition should not be triggered (false)
+
+        system.NUMPOINTS = 5;
+        system.X = new double[] {0, 20, 30, 40, 50};
+        system.Y = new double[] {1, 10, 3, 0, 0};
+        assertEquals(system.LIC11(), false);
+
+    // Test of the LIC number 11 in a case where NUMPOINTS < 3 (false)
+    
+	system.NUMPOINTS = 3;
+        system.X = new double[] {0, 20, 30};
+        system.Y = new double[] {1, 10, 3};
+        assertEquals(system.LIC11(), false);
+    }
+
 }
