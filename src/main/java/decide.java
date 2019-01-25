@@ -62,6 +62,31 @@ class Decide {
     public boolean LAUNCH;
 
     /**
+    computePUM calculates the array PUM according to the rules stated in the problem description
+    This method assumes that LCM and all CMVs are computed previous to its execution
+    */
+    public void computePUM(){
+        for(int i = 0; i < 15; i++){
+            for(int j = i + 1; j < 15; j++){
+                String val = LCM[i][j];
+                // apply the corresponding operation
+                if(val.equals("ANDD")){
+                    PUM[i][j] = CMV[i] && CMV[j];
+                }
+                else if(val.equals("ORR")){
+                    PUM[i][j] = CMV[i] || CMV[j];
+                }
+                else{
+                    PUM[i][j] = true;
+                }
+                // it is a symmetric matrix
+                PUM[j][i] = PUM[i][j];
+            }
+        }
+    }
+	
+	
+    /**
     Computation of the LIC number 0
     Assess whether there exist at least one set of two consecutive data points which the distance
     between them is greater than LENGTH1.
@@ -151,7 +176,7 @@ class Decide {
 	return r > rad;
     }
 
-	/**
+    	/**
 	Find whether or not there exists two sets of three points, both with
 	A_PTS and B_PTS between the first and second and second and third point
 	respectively, where the first set cannot be contained in a circle with
