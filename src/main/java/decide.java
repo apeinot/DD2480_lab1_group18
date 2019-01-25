@@ -88,7 +88,7 @@ class Decide {
 	    }
 	}
     }
-    
+
     /**
     computePUM calculates the array PUM according to the rules stated in the problem description
     This method assumes that LCM and all CMVs are computed previous to its execution
@@ -112,8 +112,8 @@ class Decide {
             }
         }
     }
-	
-	
+
+
     /**
     Computation of the LIC number 0
     Assess whether there exist at least one set of two consecutive data points which the distance
@@ -204,6 +204,50 @@ class Decide {
 	return r > rad;
     }
 
+	/**
+	There exists at least one set of three data points separated by exactly C PTS and D PTS
+	consecutive intervening points, respectively, that form an angle such that:
+	angle < (PI−EPSILON) or angle > (PI+EPSILON)
+	The second point of the set of three points is always the vertex of the angle. If either the first
+	point or the last point (or both) coincide with the vertex, the angle is undefined and the LIC
+	is not satisfied by those three points. When NUMPOINTS < 5, the condition is not met.
+	1 ≤ C PTS, 1 ≤ D PTS
+	C PTS+D PTS ≤ NUMPOINTS−3
+	*/
+	public boolean LIC9(){
+		double e = PARAMETERS.EPSILON;
+		int c = PARAMETERS.C_PTS;
+		int d = PARAMETERS.D_PTS;
+		if(NUMPOINTS < 5 || !(1 <= c && 1 <= d && c+d <= NUMPOINTS-3)){//Bad data
+			return false;
+		}
+		int B = c+1;
+		int C = B+d+1;
+		double angle;
+		double aLen,bLen,cLen;
+		for (int A = 0; C < NUMPOINTS ; A++, B++, C++) {
+			if((X[A]==X[B] && Y[A]==Y[B]) || (X[A]==X[C] && Y[A]==Y[C])){ //If the end points converge with the middle point.
+				continue;
+			}
+			aLen = PointDist(B,C); //The length of the side opposed vertex A
+			bLen = PointDist(A,C); //The length of the side opposed vertex B
+			cLen = PointDist(A,B); //The length of the side opposed vertex C
+			angle = Math.acos((aLen+cLen-bLen)/(2*aLen*aLen*cLen*cLen)); //Law of cosines
+			if(angle < (PI-e) || angle > (PI+e)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	@param A A point(it's index)
+	@param B Another point(it's index)
+	@return The distance between the points
+	*/
+	public double PointDist(int A, int B){
+		return Math.sqrt(Math.pow(X[A]-X[B],2) + Math.pow(Y[A]-Y[B],2));
+	}
     	/**
 	Find whether or not there exists two sets of three points, both with
 	A_PTS and B_PTS between the first and second and second and third point
