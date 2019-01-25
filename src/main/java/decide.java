@@ -56,11 +56,39 @@ class Decide {
     public double[] Y = new double[100];
     public int NUMPOINTS;
     public String[][] LCM = new String[15][15]; //possible value "NOTUSED", "ORR", "ANDD"
+    public boolean[] PUV = new boolean[15];
     public boolean[][] PUM = new boolean[15][15];
     public boolean[] CMV = new boolean[15];
     public boolean[] FUV = new boolean[15];
     public boolean LAUNCH;
 
+    /**
+    computeFUV calculates the vector FUV according to the rules stated in the problem description
+    This method assumes that PUM and PUV are present previous to its execution
+    */
+    public void computeFUV(){
+        for(int i = 0; i < 15; i++){
+            FUV[i] = true;
+
+            // if this is not the case FUV[i] is true by definition
+            if(PUV[i]){
+                for(int j = 0; j < 15; j++){
+
+                    // the diagonal entries are not defined
+                    if(i == j){
+                        continue;
+                    }
+
+                    // all entries in the row have to be true
+                    if(!PUM[i][j]){
+                        FUV[i] = false;
+                        break;
+                    }
+                }
+	    }
+	}
+    }
+    
     /**
     computePUM calculates the array PUM according to the rules stated in the problem description
     This method assumes that LCM and all CMVs are computed previous to its execution

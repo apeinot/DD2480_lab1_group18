@@ -69,6 +69,46 @@ public class DecideTest {
     }
 
     /**
+    Test case for the computeFUV function of Decide.java.
+    Expected values of the FUV cells are:
+    [0]  - false, since PUM[0][1] is false
+    [4]  - true, since all PUM cells in the fourth row are true
+    [12] - true, since PUV[4] is true
+    */
+    @Test
+    public void testComputeFUV(){
+        Decide decide = new Decide();
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j < 15; j++){
+
+                decide.PUM[i][j] = true;
+            }
+        }
+
+        // PUM is a symmetric matrix
+        decide.PUM[0][1] = false;
+        decide.PUM[1][0] = false;
+        decide.PUM[12][13] = false;
+        decide.PUM[13][12] = false;
+        for(int i = 0; i < 15; i++){
+            // set only twelvth entry to false
+            if(i != 12){
+                decide.PUV[i] = true;
+            }
+            else{
+                decide.PUV[i] = false;
+            }
+        }
+        decide.computeFUV();
+        // this row of PUM has a false entry
+        assertEquals(decide.FUV[0], false);
+        // in this row PUV is false which makes FUV true by definition
+        assertEquals(decide.FUV[12], true);
+        // all entries in PUM are true and there FUV has to be true
+        assertEquals(decide.FUV[4], true);
+    }
+
+    /**
     Test case for computePUM function in Decide.java. This test case
     sets all values of LCM to 'NOTUSED'. Therefore, the expected value
     for all cells in PUM is true.
