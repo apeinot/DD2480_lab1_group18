@@ -211,8 +211,7 @@ class Decide {
 	The second point of the set of three points is always the vertex of the angle. If either the first
 	point or the last point (or both) coincide with the vertex, the angle is undefined and the LIC
 	is not satisfied by those three points. When NUMPOINTS < 5, the condition is not met.
-	1 ≤ C PTS, 1 ≤ D PTS
-	C PTS+D PTS ≤ NUMPOINTS−3
+	1 ≤ C PTS, 1 ≤ D PTS, C PTS+D PTS ≤ NUMPOINTS−3
 	*/
 	public boolean LIC9(){
 		double e = PARAMETERS.EPSILON;
