@@ -34,6 +34,32 @@ public class DecideTest {
         assertEquals(d.lic1(), false);
     }
 
+    /**
+    Test for LIC 13. First case should result in true, as the radius 15 is too small, whereas
+    20 is enough to cover a set of three points.
+    */
+    @Test
+    public void testLIC13() {
+        Decide d = new Decide();
+        d.NUMPOINTS = 7;
+        d.X = new double[]{0,14,30,29,13,40,2};
+        d.Y = new double[]{0,27,0,44,16,22,15};
+        d.PARAMETERS.A_PTS = 1;
+        d.PARAMETERS.B_PTS = 1;
+        d.PARAMETERS.RADIUS1=15;
+        d.PARAMETERS.RADIUS2=20;
+        assertEquals(d.lic13(), true);
+
+        d.NUMPOINTS = 7;
+        d.X = new double[]{0,-10,30,29,13,40,2};
+        d.Y = new double[]{0,27,0,44,70,22,15};
+        d.PARAMETERS.A_PTS = 1;
+        d.PARAMETERS.B_PTS = 1;
+        d.PARAMETERS.RADIUS1=15;
+        d.PARAMETERS.RADIUS2=20;
+        assertEquals(d.lic13(), false);
+    }
+
     @Test
     public void testTrue() {
         assertEquals(true, true);
@@ -50,7 +76,7 @@ public class DecideTest {
 
 
     // Test of the LIC number 0 in a case where the condition should not be triggered (false)
-    
+
 	system.NUMPOINTS = 5;
         system.X = new double[] {0, 20, 2, 0, 12};
         system.Y = new double[] {1, 10, 3, 0, 0};

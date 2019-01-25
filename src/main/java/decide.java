@@ -134,11 +134,14 @@ class Decide {
 	    if (Math.toDegrees(Math.max(Math.max(v1,v2),v3)) < 90){
 	        //For an acute triangle the smallest circle will be the circumscribed circle
 	        //of the triangle
-	    	double sa = (y[1]-y[0])/(x[1]-x[0]);
-	    	double sb = (y[2]-y[1])/(x[2]-x[1]);
-	    	double cx = (sa*sb*(y[0]-y[2])+sb*(x[0]+x[1])-sa*(x[1]+x[2])/(2*sb-sa));
-	    	double cy = -1*(cx-(x[0]+x[1])/2)/sa+(y[0]+y[1])/2;
-	    	r = Math.sqrt(Math.pow(cx-x[0],2)+Math.pow(cy-y[0],2));
+			double offset = Math.pow(x[1],2)+Math.pow(y[1],2);
+			double bc = (Math.pow(x[0],2)+Math.pow(y[0],2)-offset)/2;
+			double cd = (offset-Math.pow(x[2],2)-Math.pow(y[2],2))/2;
+			double det = (x[0]-x[1])*(y[1]-y[2])-(x[1]-x[2])*(y[0]-y[1]);
+			double idet = 1/det;
+			double centerx = (bc*(y[1]-y[2])-cd*(y[0]-y[1]))*idet;
+			double centery = (cd*(x[0]-x[1])-bc*(x[1]-x[2]))*idet;
+			r = Math.sqrt(Math.pow(x[1]-centerx,2)+Math.pow(y[1]-centery,2));
 	    } else {
 		//The smallest circle that encloses a right or obtuse triangle has its
 		//diameter equal to the longest side of the triangle
@@ -148,7 +151,47 @@ class Decide {
 	return r > rad;
     }
 
-	
+	/**
+	Find whether or not there exists two sets of three points, both with
+	A_PTS and B_PTS between the first and second and second and third point
+	respectively, where the first set cannot be contained in a circle with
+	radius RADIUS1, whereas the second set can be contained in a circle with
+	radius RADIUS2.  Uses helper function lic1Calculator
+	@return true if both conditions are met
+	*/
+	public boolean lic13(){
+		if (NUMPOINTS < 5 || PARAMETERS.A_PTS < 1 || PARAMETERS.B_PTS < 1){
+			return false;
+		}
+		double rad1 = PARAMETERS.RADIUS1;
+		double rad2 = PARAMETERS.RADIUS2;
+		double[] x = new double[3];
+		double[] y = new double[3];
+		int adist = PARAMETERS.A_PTS;
+		int bdist = PARAMETERS.B_PTS;
+		boolean res1 = false;
+		boolean res2 = false;
+		for (int i = 0; i < NUMPOINTS-adist-bdist-2; i++){
+			x[0] = X[i];
+			x[1] = X[i+adist+1];
+			x[2] = X[i+adist+bdist+2];
+			y[0] = Y[i];
+			y[1] = Y[i+adist+1];
+			y[2] = Y[i+adist+bdist+2];
+			if(!res1){
+				res1 = lic1Calculator(rad1, x, y);
+			}
+			if(!res2){
+				res2 = !lic1Calculator(rad2, x, y);
+			}
+			if (res1 && res2) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
     public void decide(){
 
     }
@@ -156,5 +199,26 @@ class Decide {
     public static void main (String[] args){
         System.out.println("Hello World");
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
