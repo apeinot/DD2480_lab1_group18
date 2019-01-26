@@ -3,6 +3,7 @@
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.lang.Math;
 
 import org.junit.Test;
 
@@ -95,7 +96,38 @@ public class DecideTest {
         d.X = new double[]{1,0,1,0,1,1,10,1,1,1};
         d.Y = new double[]{1,10,1,0,1,1,0,1,1,1};
         assertEquals(d.LIC9(), true);
+    }
 
+    /**
+    Test for LIC9. Expected result true as angle is PI radians and epsilon is zero
+    */
+    @Test
+    public void testLIC9_4(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.EPSILON = 0;
+        d.X = new double[]{0,0,10,0,20};
+        d.Y = new double[]{0,0,0,0,0};
+        assertEquals(d.LIC9(), true);
+    }
+
+    /**
+    Test the method pointDist
+    */
+    @Test
+    public void testPointDist(){
+        Decide d = new Decide();
+        d.X = new double[]{0,1};
+        d.Y = new double[]{0,0};
+        assertEquals(d.PointDist(0,1), 1, 0.0001);
+        d.X = new double[]{0,1};
+        d.Y = new double[]{0,1};
+        assertEquals(d.PointDist(0,1), Math.sqrt(2), 0.0001);
+        d.X = new double[]{0,5,45};
+        d.Y = new double[]{0,6,0};
+        assertEquals(d.PointDist(0,2), 45, 0.0001);
     }
 
     /**
