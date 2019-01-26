@@ -546,6 +546,29 @@ class Decide {
 		return false;
 	}
 
+	/**
+	Sets the a field of the vector CMV to true if the corresponding LIC is
+	met; otherwise the field is set to false
+	*/
+	public void computeCMV(){
+		CMV[0] = LIC0();
+		CMV[1] = lic1();
+		CMV[2] = LIC2();
+		CMV[3] = LIC3();
+		CMV[4] = false; // MISSING
+		CMV[5] = LIC5();
+		CMV[6] = lic6();
+		CMV[7] = LIC7();
+		CMV[8] = LIC8();
+		CMV[9] = LIC9();
+		CMV[10] = false; // MISSING
+		CMV[11] = false; // MISSING
+		CMV[12] = LIC12();
+		CMV[13] = lic13();
+		CMV[14] = false; // MISSING
+	}
+
+
     public void decide(){
 
     }

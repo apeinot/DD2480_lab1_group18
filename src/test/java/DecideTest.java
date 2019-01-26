@@ -534,4 +534,20 @@ public class DecideTest {
         assertEquals(system.LIC7(), false);
     }
 
+    
+    /**
+    Test case for computeCMV function of Decide.java. This case evaluates whether
+    the CMV vector is correctly set to true or false
+    */
+    @Test
+    public void testComputeCMV(){
+        Decide system = new Decide();
+        system.NUMPOINTS = 5;
+	    system.PARAMETERS.K_PTS = 3;
+        system.X = new double[] {0, 20, 2, 0, 102};
+        system.Y = new double[] {1, 10, 3, 0, 0};
+        system.computeCMV();
+        assertEquals(system.CMV[7], true);
+    }
+
 }
