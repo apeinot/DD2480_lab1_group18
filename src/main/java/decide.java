@@ -204,6 +204,35 @@ class Decide {
 	return r > rad;
     }
 
+    /**
+    Assesses whether there at least exists one set of three consecutive data
+    data points that are the vertices of a triangle with area greater than AREA1.
+    Applies Heron's formula to calculate the area of the triangles.
+    @return - true or false, depending on whether the condition described above
+              is fulfilled or not.
+    */
+    public boolean LIC3(){
+        double AREA1 = PARAMETERS.AREA1;
+    	// Parameters in domain
+        if(NUMPOINTS != X.length || NUMPOINTS != Y.length || AREA1 < 0)
+            return false;
+        for(int i = 0; i < NUMPOINTS - 2; i++){
+            // The three sides of the triangle
+            double a = Math.sqrt(Math.pow(X[i+1] - X[i], 2) + Math.pow(Y[i+1] - Y[i], 2));
+            double b = Math.sqrt(Math.pow(X[i+2] - X[i+1], 2) + Math.pow(Y[i+2] - Y[i+1], 2));
+            double c = Math.sqrt(Math.pow(X[i] - X[i+2], 2) + Math.pow(Y[i] - Y[i+2], 2));
+
+            // The "semiperimeter"
+            double s = 0.5 * (a + b + c);
+
+            // Heron's formula
+            double area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+            if(area > AREA1){
+		return true;
+            }
+        }
+        return false;
+    }
 
 	/**
 	Calculates whether there exists a set of N_PTS consecutive points such that
