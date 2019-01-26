@@ -112,6 +112,19 @@ class Decide {
             }
         }
     }
+
+    /**
+    Sets the global variable LAUNCH to true if and only if all entries of FUV
+    are true, otherwise LAUNCH will be false after the execution of computeLAUNCH.
+    computeLAUNCH requires FUV to be previously filled with correct values
+    */
+    public void computeLAUNCH(){
+        LAUNCH = true;
+        //LAUNCH will only be true after the for loop if all entries of FUV are true
+        for(int i = 0; i < 15; i++){
+            LAUNCH = LAUNCH && FUV[i];
+        }
+    }
 	
 	
     /**
@@ -203,6 +216,7 @@ class Decide {
 	}
 	return r > rad;
     }
+
 
     /**
     Assesses whether there at least exists one set of three consecutive data
