@@ -222,8 +222,7 @@ class Decide {
 		}
 		int B = c+1;
 		int C = B+d+1;
-		double angle;
-		double aLen,bLen,cLen;
+		double angle,aLen,bLen,cLen,cross_product;
 		for (int A = 0; C < NUMPOINTS ; A++, B++, C++) {
 			if((X[A]==X[B] && Y[A]==Y[B]) || (X[A]==X[C] && Y[A]==Y[C])){ //If the end points converge with the middle point.
 				continue;
@@ -233,7 +232,8 @@ class Decide {
 			cLen = PointDist(A,B); //The length of the side opposed vertex C
 
 			angle = Math.acos((aLen*aLen+cLen*cLen-bLen*bLen)/(2*aLen*cLen)); //Law of cosines
-			System.out.println(angle);
+			cross_product = (X[A] - X[B]) * (Y[C] - Y[B]) - (Y[A] - Y[B]) * (X[C] - X[B]);
+			angle = cross_product < 0 ? 2*PI-angle : angle;
 			if(angle < (PI-e) || angle > (PI+e)){
 				return true;
 			}
