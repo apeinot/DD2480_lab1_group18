@@ -58,7 +58,7 @@ public class DecideTest {
     }
 
     @Test
-    public void testLIC3(){
+    public void testLIC10(){
         Decide system = new Decide();
         /*
         Test with area less than AREA1 (200 square units), should be false.
@@ -92,6 +92,83 @@ public class DecideTest {
         system.X = new double[] {0,   1,2,3,4,5,6,   21,   1,2,3,4,5,6,7,8,   21};
         system.Y = new double[] {0,   1,2,3,4,5,6,   0,   1,2,3,4,5,6,7,8,   21};
         assertEquals(system.LIC10(), false);
+    }
+
+    /**
+    Test for LIC10. Should return false as input data is bad
+    */
+    @Test
+    public void testLIC10_1(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 4;
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=10;
+        assertEquals(d.LIC10(), false); //NUMPOINTS < 5.
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.E_PTS = 0;
+        assertEquals(d.LIC10(), false);//1 ≤ E_PTS
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 0;
+        assertEquals(d.LIC10(), false);//1 ≤ F_PTS
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.F_PTS = 2;
+        assertEquals(d.LIC10(), false);//E PTS+F PTS ≤ NUMPOINTS−3
+    }
+
+    /**
+    Test for LIC10. Should return true and false since area will be 50
+    */
+    @Test
+    public void testLIC10_2(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 5;
+        d.X = new double[]{0, 0, 10, 0, 10};
+        d.Y = new double[]{0, 0, 0, 0, 10};
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=49;
+        assertEquals(d.LIC10(), true);
+        d.PARAMETERS.AREA1=50;
+        assertEquals(d.LIC10(), false);
+    }
+
+    /**
+    Test for LIC10. Should return true,false,true since E_PTS and F_PTS change
+    accordingly.
+    */
+    @Test
+    public void testLIC10_3(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 6;
+        d.X = new double[]{0, 0, 0, 10, 0, 10};
+        d.Y = new double[]{0, 0, 0, 0, 0, 10};
+        d.PARAMETERS.E_PTS = 2;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=49;
+        assertEquals(d.LIC10(), true);
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 2;
+        assertEquals(d.LIC10(), false);
+        d.X = new double[]{0, 0, 10, 0, 0, 10};
+        d.Y = new double[]{0, 0, 0, 0, 0, 10};
+        assertEquals(d.LIC10(), true);
+    }
+
+    /**
+    Test for LIC10. Should return true,false,true since E_PTS and F_PTS change
+    accordingly.
+    */
+    @Test
+    public void testLIC10_4(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 10;
+        d.X = new double[]{0, 0, 0, 0, 0, 0, 0, 10, 0, 10};
+        d.Y = new double[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 10};
+        d.PARAMETERS.E_PTS = 2;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1 = 49;
+        assertEquals(d.LIC10(), true);
     }
 
 }
