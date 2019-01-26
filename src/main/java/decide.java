@@ -88,7 +88,7 @@ class Decide {
 	    }
 	}
     }
-    
+
     /**
     computePUM calculates the array PUM according to the rules stated in the problem description
     This method assumes that LCM and all CMVs are computed previous to its execution
@@ -112,6 +112,7 @@ class Decide {
             }
         }
     }
+
 
     /**
     Sets the global variable LAUNCH to true if and only if all entries of FUV
@@ -217,6 +218,43 @@ class Decide {
 	return r > rad;
     }
 
+	/**
+	There exists at least one set of three data points separated by exactly C PTS and D PTS
+	consecutive intervening points, respectively, that form an angle such that:
+	angle < (PI−EPSILON) or angle > (PI+EPSILON)
+	The second point of the set of three points is always the vertex of the angle. If either the first
+	point or the last point (or both) coincide with the vertex, the angle is undefined and the LIC
+	is not satisfied by those three points. When NUMPOINTS < 5, the condition is not met.
+	1 ≤ C PTS, 1 ≤ D PTS, C PTS+D PTS ≤ NUMPOINTS−3
+	*/
+	public boolean LIC9(){
+		double e = PARAMETERS.EPSILON;
+		int c = PARAMETERS.C_PTS;
+		int d = PARAMETERS.D_PTS;
+		if(NUMPOINTS < 5 || !(1 <= c && 1 <= d && c+d <= NUMPOINTS-3)){//Bad data
+			return false;
+		}
+		int B = c+1;
+		int C = B+d+1;
+		double angle,aLen,bLen,cLen,cross_product;
+		for (int A = 0; C < NUMPOINTS ; A++, B++, C++) {
+			if((X[A]==X[B] && Y[A]==Y[B]) || (X[A]==X[C] && Y[A]==Y[C])){ //If the end points converge with the middle point.
+				continue;
+			}
+			aLen = PointDist(B,C); //The length of the side opposed vertex A
+			bLen = PointDist(A,C); //The length of the side opposed vertex B
+			cLen = PointDist(A,B); //The length of the side opposed vertex C
+
+			angle = Math.acos((aLen*aLen+cLen*cLen-bLen*bLen)/(2*aLen*cLen)); //Law of cosines
+			cross_product = (X[A] - X[B]) * (Y[C] - Y[B]) - (Y[A] - Y[B]) * (X[C] - X[B]);
+			angle = cross_product < 0 ? 2*PI-angle : angle;
+			if(angle < (PI-e) || angle > (PI+e)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
     /**
     Checks if there are three consecutive points that form an angle greater
     than (PI + EPSILON) or less than (PI - EPSILON) where the second point
@@ -315,8 +353,19 @@ class Decide {
 			}
 		}
 		return false;
-
 	}
+
+	/**
+	Calculates the distance between two points
+	@param A A point(it's index)
+	@param B Another point(it's index)
+	@return The distance between the points
+	*/
+	public double PointDist(int A, int B){
+		return Math.sqrt(Math.pow(X[A]-X[B],2) + Math.pow(Y[A]-Y[B],2));
+	}
+
+	
 
 	/**
 	Helper function for lic6(). Calculates the distance from the line between
@@ -364,9 +413,9 @@ class Decide {
 	    	if (X[i]-X[i-1] < 0){
 				return true;
 	    	}
-	}
+		}
 
-    return false;
+    	return false;
     }
 
     /**
@@ -434,27 +483,27 @@ class Decide {
     @return - true if the condition is fulfilled (otherwise False)
     */
     public boolean LIC12(){
-	double dist = 0;
-	boolean cond1 = false;
-	boolean cond2 = false;
-	if (NUMPOINTS < 3 || PARAMETERS.K_PTS < 1 || PARAMETERS.K_PTS > NUMPOINTS-2 || PARAMETERS.LENGTH2 < 0){
-	    return false;
-	}	
-	for (int i=PARAMETERS.K_PTS+1; i<NUMPOINTS; i++){
-	    dist = Math.sqrt((X[i]-X[i-PARAMETERS.K_PTS-1])*(X[i]-X[i-PARAMETERS.K_PTS-1]) + (Y[i] - Y[i-PARAMETERS.K_PTS-1])*(Y[i] - Y[i-PARAMETERS.K_PTS-1]));
-	    if (dist > PARAMETERS.LENGTH1){
-		cond1 = true;
-	    }
-	    if (dist < PARAMETERS.LENGTH2){
-		cond2 = true;
-	    }
+		double dist = 0;
+		boolean cond1 = false;
+		boolean cond2 = false;
+		if (NUMPOINTS < 3 || PARAMETERS.K_PTS < 1 || PARAMETERS.K_PTS > NUMPOINTS-2 || PARAMETERS.LENGTH2 < 0){
+	    	return false;
+		}	
+		for (int i=PARAMETERS.K_PTS+1; i<NUMPOINTS; i++){
+	    	dist = Math.sqrt((X[i]-X[i-PARAMETERS.K_PTS-1])*(X[i]-X[i-PARAMETERS.K_PTS-1]) + (Y[i] - Y[i-PARAMETERS.K_PTS-1])*(Y[i] - Y[i-PARAMETERS.K_PTS-1]));
+	    	if (dist > PARAMETERS.LENGTH1){
+				cond1 = true;
+	    	}
+	    	if (dist < PARAMETERS.LENGTH2){
+				cond2 = true;
+	    	}
 		
-	    if (cond1 && cond2){
-		return true;
-	    }
-	}
+	    	if (cond1 && cond2){
+				return true;
+	    	}
+		}
 	
-	return false;
+		return false;
     }
 
     	/**

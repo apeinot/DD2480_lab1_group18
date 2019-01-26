@@ -3,6 +3,7 @@
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.lang.Math;
 
 import org.junit.Test;
 import java.lang.Math;
@@ -78,6 +79,98 @@ public class DecideTest {
         d.Y = new double[]{23, -7, 12, 15, 10};
         d.PARAMETERS.RADIUS1=15;
         assertEquals(d.lic1(), false);
+    }
+
+
+    /**
+    Test for LIC9. Should return false as input data is bad
+    */
+    @Test
+    public void testLIC9_1(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 4;
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.AREA1=10;
+        assertEquals(d.LIC9(), false); //NUMPOINTS < 5.
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.C_PTS = 0;
+        assertEquals(d.LIC9(), false);//1 ≤ C_PTS
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 0;
+        assertEquals(d.LIC9(), false);//1 ≤ D_PTS
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.D_PTS = 2;
+        assertEquals(d.LIC9(), false);//E PTS+F PTS ≤ NUMPOINTS−3
+    }
+
+    /**
+    Test for LIC9. Expected result true and false since espilon changes to large number
+    */
+    @Test
+    public void testLIC9_2(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.EPSILON = 1;
+        d.X = new double[]{0,0,0,0,10};
+        d.Y = new double[]{10,0,0,0,0};
+        assertEquals(d.LIC9(), true);
+        d.PARAMETERS.EPSILON = 10;
+        assertEquals(d.LIC9(), false);
+    }
+
+    /**
+    Test for LIC9. Expected result true,false,true since C_PTS and D_PTS change accordingly
+    */
+    @Test
+    public void testLIC9_3(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 10;
+        d.PARAMETERS.C_PTS = 2;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.EPSILON = 1;
+        d.X = new double[]{1,0,1,1,0,1,10,1,1,1};
+        d.Y = new double[]{1,10,1,1,0,1,0,1,1,1};
+        assertEquals(d.LIC9(), true);
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 2;
+        d.X = new double[]{1,0,1,0,1,1,10,1,1,1};
+        d.Y = new double[]{1,10,1,0,1,1,0,1,1,1};
+        assertEquals(d.LIC9(), true);
+    }
+
+    /**
+    Test for LIC9. Expected result true as angle is PI radians and epsilon is zero
+    */
+    @Test
+    public void testLIC9_4(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.EPSILON = 0;
+        d.X = new double[]{0,0,10,0,20};
+        d.Y = new double[]{0,0,0,0,0};
+        assertEquals(d.LIC9(), true);
+    }
+
+    /**
+    Test the method pointDist
+    */
+    @Test
+    public void testPointDist(){
+        Decide d = new Decide();
+        d.X = new double[]{0,1};
+        d.Y = new double[]{0,0};
+        assertEquals(d.PointDist(0,1), 1, 0.0001);
+        d.X = new double[]{0,1};
+        d.Y = new double[]{0,1};
+        assertEquals(d.PointDist(0,1), Math.sqrt(2), 0.0001);
+        d.X = new double[]{0,5,45};
+        d.Y = new double[]{0,6,0};
+        assertEquals(d.PointDist(0,2), 45, 0.0001);
     }
 
     /**
