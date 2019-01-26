@@ -204,6 +204,38 @@ class Decide {
 	return r > rad;
     }
 
+    /**
+    Checks if there is at least one set of three consecutive points where the
+    1st and the 2nd one are separated by PARAMETERS.A_PTS number of points,
+    the 2nd and 3rd one are separated by PARAMETERS.B_PTS number of points.
+    @return true if three such points are found, otherwise false
+    */
+    public boolean LIC8(){
+	int A_PTS = PARAMETERS.A_PTS;
+        int B_PTS = PARAMETERS.B_PTS;
+        // Checking LIC requirements from the instructions
+        if(NUMPOINTS < 5 || A_PTS < 1 || B_PTS < 1 ||
+            A_PTS + B_PTS > (NUMPOINTS - 3) ||
+            NUMPOINTS != X.length || NUMPOINTS != Y.length)
+                return false;
+        double rad = PARAMETERS.RADIUS1;
+        double[] x = new double[3];
+        double[] y = new double[3];
+        for (int i = 0; i+A_PTS+1+B_PTS+1 < NUMPOINTS; i++) {
+            x[0] = X[i];
+            x[1] = X[i+A_PTS+1];
+            x[2] = X[i+A_PTS+1+B_PTS+1];
+            y[0] = Y[i];
+            y[1] = Y[i+A_PTS+1];
+            y[2] = Y[i+A_PTS+1+B_PTS+1];
+            boolean res = lic1Calculator(rad, x, y);
+            if (res) {
+                return res;
+	    }
+	}
+	return false;
+    }
+
     	/**
 	Find whether or not there exists two sets of three points, both with
 	A_PTS and B_PTS between the first and second and second and third point
@@ -252,26 +284,5 @@ class Decide {
     public static void main (String[] args){
         System.out.println("Hello World");
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
