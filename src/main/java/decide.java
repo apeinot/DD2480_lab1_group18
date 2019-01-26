@@ -88,7 +88,7 @@ class Decide {
 	    }
 	}
     }
-    
+
     /**
     computePUM calculates the array PUM according to the rules stated in the problem description
     This method assumes that LCM and all CMVs are computed previous to its execution
@@ -112,8 +112,8 @@ class Decide {
             }
         }
     }
-	
-	
+
+
     /**
     Computation of the LIC number 0
     Assess whether there exist at least one set of two consecutive data points which the distance
@@ -244,6 +244,41 @@ class Decide {
 		return false;
 	}
 
+	/**
+	There exists at least one set of three data points, separated by exactly E PTS and F PTS con-
+	secutive intervening points, respectively, that are the vertices of a triangle with area greater
+
+	than AREA1. In addition, there exist three data points (which can be the same or different
+
+	from the three data points just mentioned) separated by exactly E PTS and F PTS consec-
+	utive intervening points, respectively, that are the vertices of a triangle with area less than
+
+	AREA2. Both parts must be true for the LIC to be true. The condition is not met when
+	NUMPOINTS < 5.
+	0 ≤ AREA2
+	Must be true:
+	1 ≤ E_PTS, 1 ≤ F_PTS		|Theese two are not a part of lab instructions.
+	E PTS+F PTS ≤ NUMPOINTS−3	|I just assumed they were.
+	*/
+	public boolean LIC14(){
+		int e = PARAMETERS.E_PTS;
+		int f = PARAMETERS.F_PTS;
+		if(NUMPOINTS < 5 || PARAMETERS.AREA2 < 0 || !(1 <= e && 1 <= f && e+f <= NUMPOINTS-3)){ //Bad input data
+			return false;
+		}
+		int B = e+1;
+		int C = B+f+1;
+		double area;
+		boolean GT = false; //Greater than. This indicates if we found an area that is greater than AREA1
+		boolean LT = false; //Lesser than. This indicates if we found an area that is lesser than AREA2
+		for (int A = 0; C < NUMPOINTS ; A++, B++, C++) {
+			area = Math.abs(X[A]*(Y[B] - Y[C]) + X[B]*(Y[C] - Y[A]) + X[C]*(Y[A] - Y[B]))/2; //coordinate geometry formula for area
+			// System.out.println("Area:" + area + " with points:(" + X[A] + "," + Y[A] + ")(" + X[B] + "," + Y[B] + ")(" + X[C] + "," + Y[C] + ")");
+			GT = GT?GT:area > PARAMETERS.AREA1;//IF GT/LT is already set, do nothing.
+			LT = LT?LT:area < PARAMETERS.AREA2;//Else set GT/LT to GT/LT comparison.
+		}
+		return GT&&LT;
+	}
 
     public void decide(){
 
