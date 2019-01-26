@@ -274,8 +274,8 @@ class Decide {
 		for (int A = 0; C < NUMPOINTS ; A++, B++, C++) {
 			area = Math.abs(X[A]*(Y[B] - Y[C]) + X[B]*(Y[C] - Y[A]) + X[C]*(Y[A] - Y[B]))/2; //coordinate geometry formula for area
 			// System.out.println("Area:" + area + " with points:(" + X[A] + "," + Y[A] + ")(" + X[B] + "," + Y[B] + ")(" + X[C] + "," + Y[C] + ")");
-			GT = GT?GT:area > PARAMETERS.AREA1;//IF GT/LT is already set, do nothing.
-			LT = LT?LT:area < PARAMETERS.AREA2;//Else set GT/LT to GT/LT comparison.
+			GT = GT ? GT : area > PARAMETERS.AREA1;//IF GT/LT is already set, do nothing.
+			LT = LT ? LT : area < PARAMETERS.AREA2;//Else set GT/LT to GT/LT comparison.
 		}
 		return GT&&LT;
 	}
