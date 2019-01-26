@@ -383,6 +383,40 @@ public class DecideTest {
         system.Y = new double[] {1, 10, 3, 0, 0};
         assertEquals(system.LIC5(), false);
     }
+    
+    /**
+    Test cases for LIC number 12. One test where the condition is fullfil and two where it's not
+    */
+    @Test
+    public void testLIC12() {
+    // Test of the LIC number 12 in a case where the condition should be triggered 
+    // (true with LENGTH1 = 100  and LENGTH2 = 150)
+        Decide system = new Decide();
+        system.NUMPOINTS = 5;
+	system.PARAMETERS.K_PTS = 3;
+        system.X = new double[] {0, 20, 2, 0, 102};
+        system.Y = new double[] {0, 10, 3, 1, 0};
+        assertEquals(system.LIC12(), true);
+
+
+    // Test of the LIC number 12 in a case where the condition should not be triggered 
+    // (false because 12 is not greater than LENGTH1)
+
+        system.NUMPOINTS = 5;
+        system.X = new double[] {0, 20, 2, 0, 12};
+        system.Y = new double[] {0, 10, 3, 1, 0};
+        assertEquals(system.LIC12(), false);
+
+    // Test of the LIC number 12 in a case where the condition should not be triggered 
+    // (false because 1200 is not smaller than LENGTH2)
+
+        system.NUMPOINTS = 5;
+        system.X = new double[] {0, 20, 2, 0, 1200};
+        system.Y = new double[] {0, 10, 3, 1, 0};
+        assertEquals(system.LIC12(), false);
+
+    }
+
 
     /**
     Test cases for LIC number 7. One test where the condition is fullfil and another where it's not

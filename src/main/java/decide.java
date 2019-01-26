@@ -424,6 +424,39 @@ class Decide {
 		return false;
     }
 
+    /**
+    Computation of the LIC number 12
+    Assess whether there exist at least one set of two data points, separated by 
+    exactly K_PTS consecutive intervening points, which are a distance greater than 
+    the length, LENGTH1/ In addition, there exists at least one set of 
+    two data points separated by exactly K PTS consecutive intervening points, that are 
+    a distance less than the length, LENGTH2
+    @return - true if the condition is fulfilled (otherwise False)
+    */
+    public boolean LIC12(){
+	double dist = 0;
+	boolean cond1 = false;
+	boolean cond2 = false;
+	if (NUMPOINTS < 3 || PARAMETERS.K_PTS < 1 || PARAMETERS.K_PTS > NUMPOINTS-2 || PARAMETERS.LENGTH2 < 0){
+	    return false;
+	}	
+	for (int i=PARAMETERS.K_PTS+1; i<NUMPOINTS; i++){
+	    dist = Math.sqrt((X[i]-X[i-PARAMETERS.K_PTS-1])*(X[i]-X[i-PARAMETERS.K_PTS-1]) + (Y[i] - Y[i-PARAMETERS.K_PTS-1])*(Y[i] - Y[i-PARAMETERS.K_PTS-1]));
+	    if (dist > PARAMETERS.LENGTH1){
+		cond1 = true;
+	    }
+	    if (dist < PARAMETERS.LENGTH2){
+		cond2 = true;
+	    }
+		
+	    if (cond1 && cond2){
+		return true;
+	    }
+	}
+	
+	return false;
+    }
+
     	/**
 	Find whether or not there exists two sets of three points, both with
 	A_PTS and B_PTS between the first and second and second and third point
