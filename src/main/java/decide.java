@@ -327,6 +327,28 @@ class Decide {
     return false;
     }
 
+    /**
+    Computation of the LIC number 7
+    Assess whether there exist at least one set of two data points separated by exactly 
+    K_PTS consecutive intervening points which the distance
+    between them is greater than LENGTH1.
+    @return - true if the condition is fulfilled (otherwise False)
+    */
+    public boolean LIC7(){
+	double dist = 0;
+	if (NUMPOINTS < 3 || PARAMETERS.K_PTS < 1 || PARAMETERS.K_PTS > NUMPOINTS -2){
+	    return false;
+	}
+	for (int i=PARAMETERS.K_PTS+1; i<NUMPOINTS; i++){
+	    dist = Math.sqrt((X[i]-X[i-PARAMETERS.K_PTS-1])*(X[i]-X[i-PARAMETERS.K_PTS-1]) + (Y[i] - Y[i-PARAMETERS.K_PTS-1])*(Y[i] - Y[i-PARAMETERS.K_PTS-1]));
+	    if (dist > PARAMETERS.LENGTH1){
+		    return true;
+	    }
+	}
+
+	return false;
+    }  
+
 	
     /**
     Checks if there is at least one set of three consecutive points where the
