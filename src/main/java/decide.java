@@ -56,11 +56,64 @@ class Decide {
     public double[] Y = new double[100];
     public int NUMPOINTS;
     public String[][] LCM = new String[15][15]; //possible value "NOTUSED", "ORR", "ANDD"
+    public boolean[] PUV = new boolean[15];
     public boolean[][] PUM = new boolean[15][15];
     public boolean[] CMV = new boolean[15];
     public boolean[] FUV = new boolean[15];
     public boolean LAUNCH;
 
+    /**
+    computeFUV calculates the vector FUV according to the rules stated in the problem description
+    This method assumes that PUM and PUV are present previous to its execution
+    */
+    public void computeFUV(){
+        for(int i = 0; i < 15; i++){
+            FUV[i] = true;
+
+            // if this is not the case FUV[i] is true by definition
+            if(PUV[i]){
+                for(int j = 0; j < 15; j++){
+
+                    // the diagonal entries are not defined
+                    if(i == j){
+                        continue;
+                    }
+
+                    // all entries in the row have to be true
+                    if(!PUM[i][j]){
+                        FUV[i] = false;
+                        break;
+                    }
+                }
+	    }
+	}
+    }
+    
+    /**
+    computePUM calculates the array PUM according to the rules stated in the problem description
+    This method assumes that LCM and all CMVs are computed previous to its execution
+    */
+    public void computePUM(){
+        for(int i = 0; i < 15; i++){
+            for(int j = i + 1; j < 15; j++){
+                String val = LCM[i][j];
+                // apply the corresponding operation
+                if(val.equals("ANDD")){
+                    PUM[i][j] = CMV[i] && CMV[j];
+                }
+                else if(val.equals("ORR")){
+                    PUM[i][j] = CMV[i] || CMV[j];
+                }
+                else{
+                    PUM[i][j] = true;
+                }
+                // it is a symmetric matrix
+                PUM[j][i] = PUM[i][j];
+            }
+        }
+    }
+	
+	
     /**
     Computation of the LIC number 0
     Assess whether there exist at least one set of two consecutive data points which the distance
@@ -134,11 +187,14 @@ class Decide {
 	    if (Math.toDegrees(Math.max(Math.max(v1,v2),v3)) < 90){
 	        //For an acute triangle the smallest circle will be the circumscribed circle
 	        //of the triangle
-	    	double sa = (y[1]-y[0])/(x[1]-x[0]);
-	    	double sb = (y[2]-y[1])/(x[2]-x[1]);
-	    	double cx = (sa*sb*(y[0]-y[2])+sb*(x[0]+x[1])-sa*(x[1]+x[2])/(2*sb-sa));
-	    	double cy = -1*(cx-(x[0]+x[1])/2)/sa+(y[0]+y[1])/2;
-	    	r = Math.sqrt(Math.pow(cx-x[0],2)+Math.pow(cy-y[0],2));
+			double offset = Math.pow(x[1],2)+Math.pow(y[1],2);
+			double bc = (Math.pow(x[0],2)+Math.pow(y[0],2)-offset)/2;
+			double cd = (offset-Math.pow(x[2],2)-Math.pow(y[2],2))/2;
+			double det = (x[0]-x[1])*(y[1]-y[2])-(x[1]-x[2])*(y[0]-y[1]);
+			double idet = 1/det;
+			double centerx = (bc*(y[1]-y[2])-cd*(y[0]-y[1]))*idet;
+			double centery = (cd*(x[0]-x[1])-bc*(x[1]-x[2]))*idet;
+			r = Math.sqrt(Math.pow(x[1]-centerx,2)+Math.pow(y[1]-centery,2));
 	    } else {
 		//The smallest circle that encloses a right or obtuse triangle has its
 		//diameter equal to the longest side of the triangle
@@ -207,6 +263,94 @@ class Decide {
 				d = Math.pow(px-x[i],2)+Math.pow(py-y[i],2);
 			}
 			if (d > Math.pow(dist,2)){
+				return true;
+			}
+		}
+		return false;
+	}
+    /**
+    Computation of the LIC number 5
+    Assess whether there exist at least one set of two consecutive data points (X[i-1], Y[i-1])
+    and (X[i], Y[i]) which X[i]-X[i-1] < 0.
+    @return - true if the condition is fulfilled (otherwise False)
+    */
+    public boolean LIC5(){
+        for (int i=1; i<NUMPOINTS; i++){
+	    if (X[i]-X[i-1] < 0){
+		return true;
+	    }
+	}
+
+    return false;
+    }
+
+	
+    /**
+    Checks if there is at least one set of three consecutive points where the
+    1st and the 2nd one are separated by PARAMETERS.A_PTS number of points,
+    the 2nd and 3rd one are separated by PARAMETERS.B_PTS number of points.
+    @return true if three such points are found, otherwise false
+    */
+    public boolean LIC8(){
+	int A_PTS = PARAMETERS.A_PTS;
+        int B_PTS = PARAMETERS.B_PTS;
+        // Checking LIC requirements from the instructions
+        if(NUMPOINTS < 5 || A_PTS < 1 || B_PTS < 1 ||
+            A_PTS + B_PTS > (NUMPOINTS - 3) ||
+            NUMPOINTS != X.length || NUMPOINTS != Y.length)
+                return false;
+        double rad = PARAMETERS.RADIUS1;
+        double[] x = new double[3];
+        double[] y = new double[3];
+        for (int i = 0; i+A_PTS+1+B_PTS+1 < NUMPOINTS; i++) {
+            x[0] = X[i];
+            x[1] = X[i+A_PTS+1];
+            x[2] = X[i+A_PTS+1+B_PTS+1];
+            y[0] = Y[i];
+            y[1] = Y[i+A_PTS+1];
+            y[2] = Y[i+A_PTS+1+B_PTS+1];
+            boolean res = lic1Calculator(rad, x, y);
+            if (res) {
+                return res;
+	    }
+	}
+	return false;
+    }
+
+    	/**
+	Find whether or not there exists two sets of three points, both with
+	A_PTS and B_PTS between the first and second and second and third point
+	respectively, where the first set cannot be contained in a circle with
+	radius RADIUS1, whereas the second set can be contained in a circle with
+	radius RADIUS2.  Uses helper function lic1Calculator
+	@return true if both conditions are met
+	*/
+	public boolean lic13(){
+		if (NUMPOINTS < 5 || PARAMETERS.A_PTS < 1 || PARAMETERS.B_PTS < 1){
+			return false;
+		}
+		double rad1 = PARAMETERS.RADIUS1;
+		double rad2 = PARAMETERS.RADIUS2;
+		double[] x = new double[3];
+		double[] y = new double[3];
+		int adist = PARAMETERS.A_PTS;
+		int bdist = PARAMETERS.B_PTS;
+		boolean res1 = false;
+		boolean res2 = false;
+		for (int i = 0; i < NUMPOINTS-adist-bdist-2; i++){
+			x[0] = X[i];
+			x[1] = X[i+adist+1];
+			x[2] = X[i+adist+bdist+2];
+			y[0] = Y[i];
+			y[1] = Y[i+adist+1];
+			y[2] = Y[i+adist+bdist+2];
+			if(!res1){
+				res1 = lic1Calculator(rad1, x, y);
+			}
+			if(!res2){
+				res2 = !lic1Calculator(rad2, x, y);
+			}
+			if (res1 && res2) {
 				return true;
 			}
 		}
