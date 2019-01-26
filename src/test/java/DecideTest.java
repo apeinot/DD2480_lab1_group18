@@ -316,6 +316,32 @@ public class DecideTest {
         assertEquals(system.LIC0(), false);
     }
 
+    @Test
+    /**
+    Test case for LIC2 function of Decide.java. This test case evaluates
+    whether LIC2 returns true if the angle is close to 0 or close to 2*PI
+    and whether it returns false if the angle is PI 
+    */
+    public void testLIC2(){
+        Decide decide = new Decide();
+        decide.NUMPOINTS = 3;
+
+        // points will give an angle that is close to 0
+        decide.X = new double[]{3,0,1};
+        decide.Y = new double[]{7,0,5};
+        assertEquals(decide.LIC2(),true);
+
+        // points will give an angle that is close to 2*PI
+        decide.X = new double[]{1,0,3};
+        decide.Y = new double[]{5,0,7};
+        assertEquals(decide.LIC2(),true);
+
+        // points will give an angle of PI
+        decide.X = new double[]{1,0,-1};
+        decide.Y = new double[]{0,0,0};
+        assertEquals(decide.LIC2(),false);
+    }
+
     /**
     Test case for computeLAUNCH function of Decide.java. This case evaluates
     two scenarios. First, there is a case where all entries of FUV are true
@@ -367,7 +393,7 @@ public class DecideTest {
     // (true with LENGTH1 = 100)
         Decide system = new Decide();
         system.NUMPOINTS = 5;
-	system.PARAMETERS.K_PTS = 3;
+	    system.PARAMETERS.K_PTS = 3;
         system.X = new double[] {0, 20, 2, 0, 102};
         system.Y = new double[] {1, 10, 3, 0, 0};
         assertEquals(system.LIC7(), true);
