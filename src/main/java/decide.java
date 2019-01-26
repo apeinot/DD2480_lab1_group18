@@ -154,12 +154,9 @@ class Decide {
     and (X[i], Y[i]) which X[i]-X[i-1] < 0.
     @return - true if the condition is fulfilled (otherwise False)
     */
-    public boolean LIC5()
-    {
-        for (int i=1; i<NUMPOINTS; i++)
-	{
-	    if (X[i]-X[i-1] < 0)
-	    {
+    public boolean LIC5(){
+        for (int i=1; i<NUMPOINTS; i++){
+	    if (X[i]-X[i-1] < 0){
 		return true;
 	    }
 	}
