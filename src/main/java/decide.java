@@ -231,7 +231,9 @@ class Decide {
 			aLen = PointDist(B,C); //The length of the side opposed vertex A
 			bLen = PointDist(A,C); //The length of the side opposed vertex B
 			cLen = PointDist(A,B); //The length of the side opposed vertex C
-			angle = Math.acos((aLen+cLen-bLen)/(2*aLen*aLen*cLen*cLen)); //Law of cosines
+
+			angle = Math.acos((aLen*aLen+cLen*cLen-bLen*bLen)/(2*aLen*cLen)); //Law of cosines
+			System.out.println(angle);
 			if(angle < (PI-e) || angle > (PI+e)){
 				return true;
 			}
