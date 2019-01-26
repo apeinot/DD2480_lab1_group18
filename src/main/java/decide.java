@@ -69,29 +69,22 @@ class Decide {
 	          is fulfilled or not.
 	*/
 	public boolean LIC3(){
-		if(NUMPOINTS != X.length || NUMPOINTS != Y.length)
+        double AREA1 = PARAMETERS.AREA1;
+        // Parameters in domain
+		if(NUMPOINTS != X.length || NUMPOINTS != Y.length || AREA1 < 0)
 			return false;
 		for(int i = 0; i < NUMPOINTS - 2; i++){
-			int first_point = i;
-			int second_point = i + 1;
-			int third_point = i + 2;
-
-			// The three points of the triangle
-			double X1 = X[first_point], Y1 = Y[first_point];
-			double X2 = X[second_point], Y2 = Y[second_point];
-			double X3 = X[third_point], Y3 = Y[third_point];
-
 			// The three sides of the triangle
-			double a = Math.sqrt((X2 - X1) * (X2 - X1) + (Y2 - Y1) * (Y2 - Y1));
-			double b = Math.sqrt((X3 - X2) * (X3 - X2) + (Y3 - Y2) * (Y3 - Y2));
-			double c = Math.sqrt((X1 - X3) * (X1 - X3) + (Y1 - Y3) * (Y1 - Y3));
+			double a = Math.sqrt(Math.pow(X[i+1] - X[i], 2) + Math.pow(Y[i+1] - Y[i], 2));
+			double b = Math.sqrt(Math.pow(X[i+2] - X[i+1], 2) + Math.pow(Y[i+2] - Y[i+1], 2));
+			double c = Math.sqrt(Math.pow(X[i] - X[i+2], 2) + Math.pow(Y[i] - Y[i+2], 2));
 
 			// The "semiperimeter"
 			double s = 0.5 * (a + b + c);
 
 			// Heron's formula
 			double area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
-			if(area > PARAMETERS.AREA1){
+			if(area > AREA1){
 				return true;
 			}
 		}
