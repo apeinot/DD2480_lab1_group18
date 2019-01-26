@@ -205,6 +205,23 @@ class Decide {
     }
 
     /**
+    Computation of the LIC number 5
+    Assess whether there exist at least one set of two consecutive data points (X[i-1], Y[i-1])
+    and (X[i], Y[i]) which X[i]-X[i-1] < 0.
+    @return - true if the condition is fulfilled (otherwise False)
+    */
+    public boolean LIC5(){
+        for (int i=1; i<NUMPOINTS; i++){
+	    if (X[i]-X[i-1] < 0){
+		return true;
+	    }
+	}
+
+    return false;
+    }
+
+	
+    /**
     Checks if there is at least one set of three consecutive points where the
     1st and the 2nd one are separated by PARAMETERS.A_PTS number of points,
     the 2nd and 3rd one are separated by PARAMETERS.B_PTS number of points.

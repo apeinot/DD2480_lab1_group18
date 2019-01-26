@@ -246,4 +246,23 @@ public class DecideTest {
         assertEquals(system.LIC0(), false);
     }
 
+    @Test
+    public void testLIC5() {
+    // Test of the LIC number 5 in a case where the condition should be triggered (true)
+        Decide system = new Decide();
+        system.NUMPOINTS = 5;
+        system.X = new double[] {0, 20, 2, 0, 102};
+        system.Y = new double[] {1, 10, 3, 0, 0};
+        assertEquals(system.LIC5(), true);
+
+
+    // Test of the LIC number 5 in a case where the condition should not be triggered (false)
+
+        system.NUMPOINTS = 5;
+        system.X = new double[] {0, 20, 30, 40, 50};
+        system.Y = new double[] {1, 10, 3, 0, 0};
+        assertEquals(system.LIC5(), false);
+    }
+
+
 }
