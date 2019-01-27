@@ -548,6 +548,37 @@ public class DecideTest {
         decide.X = new double[]{1,0,3};
         decide.Y = new double[]{5,0,7};
 
+        // set everything to 'NOTUSED' besides cells (2,3) and (3,2)
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j< 15; j++){
+                if(i != j){
+                    decide.LCM[i][j] = "NOTUSED";
+                }
+            }
+        }
+        decide.LCM[2][3] = "ORR";
+        decide.LCM[3][2] = "ORR";
+
+        for(int i = 0; i < 15; i++){
+            if(i != 2){
+                decide.PUV[i] = false;
+            }
+            else{
+                decide.PUV[i] = true;
+            }
+        }
+
+        // first test case should lead to LAUNCH being set to true
+        decide.decide();
+        //assertEquals(decide.LAUNCH, true);
+
+        // second test case should lead to LAUNCH being set to true
+        decide.LCM[2][3] = "ANDD";
+        decide.LCM[3][2] = "ANDD";
+        decide.decide();
+        //assertEquals(decide.LAUNCH, false);
+
+
         // first and second test case MISSING
 
         // set values so that LAUNCH will be true
@@ -559,7 +590,7 @@ public class DecideTest {
             }
         }
         for(int i = 0; i < 15; i++){
-            decide.FUV[i] = true;
+            decide.PUV[i] = false;
         }
         decide.decide();
         assertEquals(decide.LAUNCH, true);
