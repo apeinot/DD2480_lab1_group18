@@ -19,6 +19,8 @@ The project as been tested under Java 8 (other versions may also work).
 
 ### Compilation, running and testing
 
+In a terminal (in the root folder of the project), run `ant test` to compile and run the test of the project as described in the [build.xml](build.xml) file.
+
 ## Statement of contributions
 
 (Each function addition is coupled with the corresponding testing)
