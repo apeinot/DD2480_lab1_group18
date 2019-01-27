@@ -218,6 +218,7 @@ class Decide {
 	return r > rad;
     }
 
+
 	/**
 	There exists at least one set of three data points separated by exactly C PTS and D PTS
 	consecutive intervening points, respectively, that form an angle such that:
@@ -471,6 +472,25 @@ class Decide {
 	    	}
 		}
 		return false;
+    }
+
+    /**
+    Computation of the LIC number 11
+    Assess whether there exist at least one set of two data points (X[i], Y[i])
+    and (X[j], Y[j]) separated by G_PTS consectutive points which X[j]-X[i] < 0.
+    @return - true if the condition is fulfilled (otherwise False)
+    */
+    public boolean LIC11(){
+        if (NUMPOINTS < 3 || PARAMETERS.G_PTS < 1 || PARAMETERS.G_PTS > NUMPOINTS-2){
+            return false;
+        }
+        for (int i=PARAMETERS.G_PTS+1; i<NUMPOINTS; i++){
+            if (X[i]-X[i-PARAMETERS.G_PTS-1] < 0){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
