@@ -8,7 +8,14 @@ Travis status:
 
 ## Running the project
 
-### Platform and dependences
+### Platform and dependencies
+
+*Platform*  
+The project as been tested under Java 8 (other versions may also work).
+
+*Dependencies*  
+* ANT is needed to build the project ([APACHE ANT documentation](https://ant.apache.org/manual/))
+* JUnit 4.12 and harmcrest_core_1.3 are already given in the lib directory
 
 ### Compilation, running and testing
 
