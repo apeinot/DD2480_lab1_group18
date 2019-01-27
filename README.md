@@ -1,10 +1,16 @@
 # DD2480_lab1_group18
-Lab 1 of DD2480 (group 18)
+Lab 1 of DD2480 (group 18): This project implement of the decide() function which is part of a hypothetical anti-ballistic missile system
 
-Travis result:
+Travis status:
 [![Build Status](https://travis-ci.org/apeinot/DD2480_lab1_group18.svg?branch=master)](https://travis-ci.org/apeinot/DD2480_lab1_group18)
 
+## Description of the project
 
+## Running the project
+
+### Platform and dependences
+
+### Compilation, running and testing
 
 ## Statement of contributions
 
