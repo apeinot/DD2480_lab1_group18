@@ -66,61 +66,62 @@ class Decide {
 
     }
 
-		/**
-		Checks if there exists at least one set of Q PTS consecutive data points that lie in more than QUADS
-		quadrants. A point exactly between two quadrants is always considered a member of the quadrant of lower index.
-		*/
-		public boolean LIC4(){
-			int p = PARAMETERS.Q_PTS;
-			int q = PARAMETERS.QUADS;
-			int[] pointsInQuads = {0,0,0,0}; //How many points in our consecutive intervall are in the different quadrants
-			int filledQuadrants = 0; //How many quadrant have points in them.
-			if(!(2 <= p && p <= NUMPOINTS && 1 <= q && q <= 3)){ //Parameter(s) not in domain
-				return false;
-			}
-			int quadrant;
-			for (int i = 0 ; i < NUMPOINTS ; i++) {
-				if(i >= p){ //If we have examined more than or exactly p points.
-					quadrant = LIC4QuadrantHelper(X[i-p],Y[i-p]); //Get in which quadrant the previous last of the consecutive points were.
-					pointsInQuads[quadrant]--;
-					if(--pointsInQuads[quadrant] == 0){ //If that was the last point in that quadrant.
-						filledQuadrants--;
-					}
-				}
-				quadrant = LIC4QuadrantHelper(X[i],Y[i]); //Get in which quadrant the first of the consecutive points is.
-				pointsInQuads[quadrant]++;
-				if(pointsInQuads[quadrant] == 1){ //If that quadrant was previously empty
-					filledQuadrants++;
-				}
-				if(filledQuadrants > q){
-					return true;
-				}
-			}
-			return false;
+    /**
+    Checks if there exists at least one set of Q PTS consecutive data points that lie 
+    in more than QUADS quadrants. A point exactly between two quadrants is always 
+    considered a member of the quadrant of lower index.
+    */
+    public boolean LIC4(){
+	int p = PARAMETERS.Q_PTS;
+	int q = PARAMETERS.QUADS;
+	int[] pointsInQuads = {0,0,0,0}; //How many points in our consecutive intervall are in the different quadrants
+	int filledQuadrants = 0; //How many quadrant have points in them.
+	if(!(2 <= p && p <= NUMPOINTS && 1 <= q && q <= 3)){ //Parameter(s) not in domain
+	    return false;
+	}
+	int quadrant;
+	for (int i = 0 ; i < NUMPOINTS ; i++) {
+	    if(i >= p){ //If we have examined more than or exactly p points.
+		quadrant = LIC4QuadrantHelper(X[i-p],Y[i-p]); //Get in which quadrant the previous last of the consecutive points were.
+		pointsInQuads[quadrant]--;
+		if(pointsInQuads[quadrant] == 0){ //If that was the last point in that quadrant.
+		    filledQuadrants--;
 		}
+	    }
+	    quadrant = LIC4QuadrantHelper(X[i],Y[i]); //Get in which quadrant the first of the consecutive points is.
+	    pointsInQuads[quadrant]++;
+	    if(pointsInQuads[quadrant] == 1){ //If that quadrant was previously empty
+		filledQuadrants++;
+	    }
+	    if(filledQuadrants > q){
+		return true;
+	    }
+	}
+	return false;
+    }
 
-		/**
-		This method calculates to which quadrant a point belong to.
-		A point exactly between two quadrants is always considered a member of the quadrant of lower index.
-		For example (0,1) is quadrant 1, (-1,0) is quadrant 2 and (0,0) is quadrant 1
-		@param x the x coordinate
-		@param y the y coordinate
-		@return A number in the range 0 - 3 denoting quadrant.
-		*/
-		public int LIC4QuadrantHelper(double x, double y){
-			if(y >= 0){ //Quadrant 1 or 2
-				if(x >= 0){
-					return 0;
-				}
-				return 1;
-			}
-			else{ //Quadrant 3 or 4
-				if(x > 0){
-					return 3;
-				}
-				return 2;
-			}
-		}
+    /**
+    This method calculates to which quadrant a point belong to.
+    A point exactly between two quadrants is always considered a member of the quadrant of lower index.
+    For example (0,1) is quadrant 1, (-1,0) is quadrant 2 and (0,0) is quadrant 1
+    @param x the x coordinate
+    @param y the y coordinate
+    @return A number in the range 0 - 3 denoting quadrant.
+    */
+    public int LIC4QuadrantHelper(double x, double y){
+	if(y >= 0){ //Quadrant 1 or 2
+	    if(x >= 0){
+		return 0;
+	    }
+	    return 1;
+        }
+	else{ //Quadrant 3 or 4
+	    if(x > 0){
+		return 3;
+	    }
+	    return 2;
+	}
+    }
 
     public static void main (String[] args){
         System.out.println("Hello World");
