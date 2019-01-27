@@ -660,7 +660,31 @@ class Decide {
 		return false;
 	}
 
-        /**
+	/**
+	Sets the a field of the vector CMV to true if the corresponding LIC is
+	met; otherwise the field is set to false
+	*/
+	public void computeCMV(){
+		// set the values corresponding to the single LICs
+		CMV[0] = LIC0();
+		CMV[1] = lic1();
+		CMV[2] = LIC2();
+		CMV[3] = LIC3();
+		CMV[4] = LIC4();
+		CMV[5] = LIC5();
+		CMV[6] = lic6();
+		CMV[7] = LIC7();
+		CMV[8] = LIC8();
+		CMV[9] = LIC9();
+		CMV[10] = LIC10();
+		CMV[11] = LIC11();
+		CMV[12] = LIC12();
+		CMV[13] = lic13();
+		CMV[14] = LIC14();
+	}
+
+
+    /**
 	There exists at least one set of three data points, separated by exactly E PTS and F PTS con-
 	secutive intervening points, respectively, that are the vertices of a triangle with area greater
 
