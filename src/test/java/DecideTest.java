@@ -835,17 +835,27 @@ public class DecideTest {
     
     /**
     Test case for computeCMV function of Decide.java. This case evaluates whether
-    the CMV vector is correctly set to true or false
+    the CMV vector is correctly set to true or false.
     */
     @Test
     public void testComputeCMV(){
         Decide system = new Decide();
-        system.NUMPOINTS = 5;
+        system.NUMPOINTS = 8;
 	    system.PARAMETERS.K_PTS = 3;
-        system.X = new double[] {0, 20, 2, 0, 102};
-        system.Y = new double[] {1, 10, 3, 0, 0};
+        system.X = new double[] {0, 20, 2, 0, 102, 1, 0, 3};
+        system.Y = new double[] {1, 10, 3, 0, 0, 5, 0, 7};
         system.computeCMV();
+        // Test of the LIC number 7 in a case where the condition should be triggered 
+        // (true with LENGTH1 = 100; because the distance is greater obviously)
         assertEquals(system.CMV[7], true);
+        // x value of second point is greater than the x value of the third point
+        assertEquals(system.CMV[5], true);
+        // last three points give an angle close to 2*PI
+        assertEquals(system.CMV[2], true);
+        system.PARAMETERS.K_PTS = 7;
+        system.computeCMV();
+        // first and last point do not have a distance greater than LENGTH1 = 100
+        assertEquals(system.CMV[12], false);
     }
 
 }
