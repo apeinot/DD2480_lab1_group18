@@ -210,16 +210,12 @@ class Decide {
     and (X[j], Y[j]) separated by G_PTS consectutive points which X[j]-X[i] < 0.
     @return - true if the condition is fulfilled (otherwise False)
     */
-    public boolean LIC11()
-    { 
-        if (NUMPOINTS < 3 || PARAMETERS.G_PTS < 1 || PARAMETERS.G_PTS > NUMPOINTS-2)
-	{
+    public boolean LIC11(){ 
+        if (NUMPOINTS < 3 || PARAMETERS.G_PTS < 1 || PARAMETERS.G_PTS > NUMPOINTS-2){
 	    return false;
 	}	
-	for (int i=PARAMETERS.G_PTS+1; i<NUMPOINTS; i++)
-	{
-	    if (X[i]-X[i-PARAMETERS.G_PTS-1] < 0)
-	    {
+	for (int i=PARAMETERS.G_PTS+1; i<NUMPOINTS; i++){
+	    if (X[i]-X[i-PARAMETERS.G_PTS-1] < 0){
 		return true;
 	    }
 	}
