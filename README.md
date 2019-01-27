@@ -5,8 +5,28 @@ Travis status:
 [![Build Status](https://travis-ci.org/apeinot/DD2480_lab1_group18.svg?branch=master)](https://travis-ci.org/apeinot/DD2480_lab1_group18)
 
 ## Description of the project
+The decide function will signal for an interceptor to be launched depending on radar data.
+
+The data is passed through 15 conditions which, together, in a specified configuration will generate the signal.
+The 15 conditions are called _launch interceptor conditions_ or *LICs* and vary greatly in complexity.
+The *LICs* apply a range of conditions on the radar including but are not limited to: position, grouping and distance of radar blips.
+
+The 15 conditions are individually evaluated, and form the fifteen elements of the _conditions met vector_ (*CMV*).
+These conditions can then be evaluated in conjunction with each other. On two conditions the operator 'AND'
+or 'OR' can be used. These values are stored in a 15x15 matrix called the _preliminary unlocking matrix_ (*PUM*).
+Two conditions can also have neither of the operators. Then their spot in the matrix will be true regardless.
+What operator to use on which two *LICs* is stored in a 15x15 matrix called the logical connector matrix.
+For final launch signal, a _final unlocking vector_ (*FUV*) is calculated.
+Position i in the vector is true if either the corresponding element in a _preliminary unlocking vector_ (*PUV*)
+is false or if all elements the i:th row in the *PUM* is true.
+If all elements of the *FUV* are true LAUNCH is set to true.
+
+
 
 ## Running the project
+
+For running and testing see *Compilation, running and testing*.
+There is currently no other way of running the project, apart from manually executing commands in build file.
 
 ### Platform and dependencies
 
