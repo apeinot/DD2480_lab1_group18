@@ -832,6 +832,66 @@ public class DecideTest {
         assertEquals(system.LIC7(), false);
     }
 
+
+    /**
+    Test case for decide function of Decide.java. This case evaluates the result of
+    the LAUNCH value after the execution of the decide function. The first case
+    should set the value LAUNCH to true and the second test case to false. The last
+    test case should be trivially true.
+    */
+    @Test
+    public void testDecide(){
+        Decide decide = new Decide();
+        decide.NUMPOINTS = 3;
+        decide.X = new double[]{1,0,3};
+        decide.Y = new double[]{5,0,7};
+
+        // set everything to 'NOTUSED' besides cells (2,3) and (3,2)
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j< 15; j++){
+                if(i != j){
+                    decide.LCM[i][j] = "NOTUSED";
+                }
+            }
+        }
+        decide.LCM[2][3] = "ORR";
+        decide.LCM[3][2] = "ORR";
+
+        for(int i = 0; i < 15; i++){
+            if(i != 2){
+                decide.PUV[i] = false;
+            }
+            else{
+                decide.PUV[i] = true;
+            }
+        }
+
+        // first test case should lead to LAUNCH being set to true
+        decide.decide();
+        assertEquals(decide.LAUNCH, true);
+
+        // second test case should lead to LAUNCH being set to false
+        decide.LCM[2][3] = "ANDD";
+        decide.LCM[3][2] = "ANDD";
+        decide.decide();
+        assertEquals(decide.LAUNCH, false);
+
+        // set values so that LAUNCH will be true
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j< 15; j++){
+                if(i != j){
+                    decide.LCM[i][j] = "NOTUSED";
+                }
+            }
+        }
+        for(int i = 0; i < 15; i++){
+            decide.PUV[i] = false;
+        }
+
+        // third test case should lead to LAUNCH being set to true
+        decide.decide();
+        assertEquals(decide.LAUNCH, true);
+    }
     
     /**
     Test case for computeCMV function of Decide.java. This case evaluates whether

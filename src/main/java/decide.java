@@ -719,8 +719,24 @@ class Decide {
 		return GT&&LT;
 	}
 
+	/**
+	Implements the entire DECIDE process. This function requires all input
+	parameters to be set correctly. The decide function assures that all
+	prerequisits of all the called functions are met.
+	*/
     public void decide(){
-
+		// call the functions the compute the vectors/matrices
+		computeCMV();
+		computePUM();
+		computeFUV();
+		computeLAUNCH();
+		// write to stdout according to the problem statement
+		if(LAUNCH){
+			System.out.println("YES");
+		}
+		else{
+			System.out.println("NO");
+		}
     }
 
     public static void main (String[] args){
