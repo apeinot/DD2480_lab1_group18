@@ -730,6 +730,13 @@ class Decide {
 		computePUM();
 		computeFUV();
 		computeLAUNCH();
+		// write to stdout according to the problem statement
+		if(LAUNCH){
+			System.out.println("YES");
+		}
+		else{
+			System.out.println("NO");
+		}
     }
 
     public static void main (String[] args){

@@ -870,14 +870,11 @@ public class DecideTest {
         decide.decide();
         assertEquals(decide.LAUNCH, true);
 
-        // second test case should lead to LAUNCH being set to true
+        // second test case should lead to LAUNCH being set to false
         decide.LCM[2][3] = "ANDD";
         decide.LCM[3][2] = "ANDD";
         decide.decide();
         assertEquals(decide.LAUNCH, false);
-
-
-        // first and second test case MISSING
 
         // set values so that LAUNCH will be true
         for(int i = 0; i < 15; i++){
@@ -890,6 +887,8 @@ public class DecideTest {
         for(int i = 0; i < 15; i++){
             decide.PUV[i] = false;
         }
+
+        // third test case should lead to LAUNCH being set to true
         decide.decide();
         assertEquals(decide.LAUNCH, true);
     }
