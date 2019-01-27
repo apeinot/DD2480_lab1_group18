@@ -546,8 +546,18 @@ class Decide {
 		return false;
 	}
 
-    public void decide(){
 
+	/**
+	Implements the entire DECIDE process. This function requires all input
+	parameters to be set correctly. The decide function assures that all
+	prerequisits of all the called functions are met.
+	*/
+    public void decide(){
+		// call the functions the compute the vectors/matrices
+		//computeCMV() is MISSING
+		computePUM();
+		computeFUV();
+		computeLAUNCH();
     }
 
     public static void main (String[] args){
