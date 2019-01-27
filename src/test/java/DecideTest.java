@@ -240,6 +240,72 @@ public class DecideTest {
         assertEquals(d.lic13(), false);
     }
 
+    /**
+    Test for LIC14. Should return false as input data is bad
+    */
+    @Test
+    public void testLIC14_1(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 4;
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=10;
+        d.PARAMETERS.AREA2=10;
+        assertEquals(d.LIC14(), false); //Violates 5 ≤ NUMPOINTS.
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.E_PTS = 0;
+        assertEquals(d.LIC14(), false);//Violates 1 ≤ E_PTS
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 0;
+        assertEquals(d.LIC14(), false);//Violates 1 ≤ F_PTS
+        d.PARAMETERS.F_PTS = 2;
+        assertEquals(d.LIC14(), false);//Violates E PTS+F PTS ≤ NUMPOINTS−3
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA2 = -1;
+        assertEquals(d.LIC14(), false);//Violates 0 ≤ AREA2
+    }
+
+    /**
+    Test for LIC14 should return false, true, false as area 1 and 2 changes accordingly
+    */
+    @Test
+    public void testLIC14_2(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 5;
+        d.X = new double[]{0, 0, 10, 0, 10};//A triangle of area 50
+        d.Y = new double[]{0, 0, 0, 0, 10};
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=49;
+        d.PARAMETERS.AREA2=50;
+        assertEquals(d.LIC14(), false); //No triangle is *smaller* than 50.
+        d.PARAMETERS.AREA2=51;
+        assertEquals(d.LIC14(), true);
+        d.PARAMETERS.AREA1=50;
+        assertEquals(d.LIC14(), false); //No triangle is *greater* than 50*
+    }
+
+    /**
+    Test for LIC14 should return true, false, testTrue as we edit area 1 and 2 accordingly.
+    */
+    @Test
+    public void testLIC14_3(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 6;
+        d.X = new double[]{0, 0, 5, 2, 5, 2};//One 5x5 right triangle one 2x2 right triangle
+        d.Y = new double[]{0, 0, 0, 0, 5, 2};
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=12; //5x5/2 should be bigger
+        d.PARAMETERS.AREA2=3; //2x2/2 should be smaller
+        assertEquals(d.LIC14(), true);
+        d.X = new double[]{0, 0, 5, 2, 5, 2};//One 5x5 right triangle one 2x3 right triangle
+        d.Y = new double[]{0, 0, 0, 0, 5, 3};
+        assertEquals(d.LIC14(), false); //2x3/2 = 3 which is not smaller than 3
+        d.PARAMETERS.AREA2=4; //2x3/2 should be smaller
+        assertEquals(d.LIC14(), true); //2x3/2 = 3 which is not smaller than 3
+    }
+
     @Test
     public void testTrue() {
         assertEquals(true, true);
