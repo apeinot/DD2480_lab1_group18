@@ -218,6 +218,42 @@ class Decide {
 	return r > rad;
     }
 
+    /**
+    Assess if there exists at least one set of three data points separated by
+    exactly E_PTS and F_PTS consecutive intervening points, respectively, that
+    are the vertices of a triangle with area greater than PARAMETERS.AREA1.
+    @return true if the condition described above is true, otherwise false.
+    */
+    public boolean LIC10(){
+        int E = PARAMETERS.E_PTS;
+        int F = PARAMETERS.F_PTS;
+        double AREA1 = PARAMETERS.AREA1;
+        // Requirements described in the program description
+        if(NUMPOINTS < 5 || E < 1 || F < 1 || E+F > NUMPOINTS - 3){
+			return false;
+        }
+        for(int i = 0; i+E+1+F+1 < NUMPOINTS; i++){
+            // The points of the triangle
+            double X1 = X[i],         Y1 = Y[i];
+            double X2 = X[i+E+1],     Y2 = Y[i+E+1];
+            double X3 = X[i+E+1+F+1], Y3 = Y[i+E+1+F+1];
+
+            // The three sides of the triangle
+            double a = Math.sqrt(Math.pow(X2 - X1, 2) + Math.pow(Y2 - Y1, 2));
+            double b = Math.sqrt(Math.pow(X3 - X2, 2) + Math.pow(Y3 - Y2, 2));
+            double c = Math.sqrt(Math.pow(X1 - X3, 2) + Math.pow(Y1 - Y3, 2));
+
+	    // The "semiperimeter"
+            double s = 0.5 * (a + b + c);
+
+	    // Heron's formula for calculating the triangle area
+            double area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+            if(area > AREA1){
+                return true;
+            }
+        }
+        return false;
+    }
 
 	/**
 	There exists at least one set of three data points separated by exactly C PTS and D PTS
