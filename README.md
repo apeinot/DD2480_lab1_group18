@@ -1,11 +1,11 @@
 # DD2480_lab1_group18
-Lab 1 of DD2480 (group 18): This project implement of the decide() function which is part of a hypothetical anti-ballistic missile system
+Lab 1 of DD2480 (group 18): This projects implements the decide function which is part of a hypothetical anti-ballistic missile system
 
 Travis status:
 [![Build Status](https://travis-ci.org/apeinot/DD2480_lab1_group18.svg?branch=master)](https://travis-ci.org/apeinot/DD2480_lab1_group18)
 
 ## Description of the project
-The decide function generate a boolean signal for an interceptor to be launched depending on radar data.
+The decide function generates a boolean signal for an interceptor to be launched depending on radar data.
 
 The data is passed through 15 conditions which, together, in a specified configuration will generate the signal.
 The 15 conditions are called _launch interceptor conditions_ or *LICs* and vary greatly in complexity.
