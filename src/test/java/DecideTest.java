@@ -3,10 +3,54 @@
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
+import java.lang.Math;
 
 import org.junit.Test;
+import java.lang.Math;
 
 public class DecideTest {
+
+    @Test
+    public void testLIC8(){
+        /*
+        The 0th (0,0) and 4th point (30,0) are (A_PTS = 3) points apart, the
+        4th (30,0) and the 14th (0,16) point are (B_PTS = 9) points apart. The
+        expected return is true, as the required radius to form a circle around
+        (0,0), (30,0) and (0,16) is greater than 15.
+        */
+        Decide d = new Decide();
+        d.NUMPOINTS = 17;
+        d.X = new double[]{0,1,2,3,30,1,2,3,4,5,6,7,8,9,0,1,10};
+        d.Y = new double[]{0,1,2,3,0,1,2,3,4,5,6,7,8,9,16,13,8};
+        d.PARAMETERS.RADIUS1=15;
+        assertEquals(d.LIC8(), true);
+
+        /*
+        The 0th (0,0) and 4th point (10,0) are (A_PTS = 3) points apart, the
+        4th (10,0) and the 14th (0,15) point are (B_PTS = 9) points apart. The
+        expected return is false, as the required radius to form a circle around
+        (0,0), (30,0) and (0,16) is 15, which is not greater than 15.
+        */
+        d.X = new double[]{0,1,2,3,10,1,2,3,4,5,6,7,8,9,0,1,2};
+        d.Y = new double[]{0,1,2,3,0,1,2,3,4,5,6,7,8,9,15,1,2};
+        assertEquals(d.LIC8(), false);
+
+        // A_PTS + B_PTS > (NUMPOINTS - 3), expected to be false.
+        d.PARAMETERS.A_PTS = 15; d.PARAMETERS.B_PTS = 2;
+        assertEquals(d.LIC8(), false);
+
+        // NUMPOINTS < 5, expected to be false.
+        d.NUMPOINTS = 4;
+        assertEquals(d.LIC8(), false);
+
+        // A_PTS = 0, which is < 1, expected to be false
+        d.PARAMETERS.A_PTS = 0;
+        assertEquals(d.LIC8(), false);
+
+        // B_PTS = -1, which is < 1, expected to be false
+        d.PARAMETERS.B_PTS = -1;
+        assertEquals(d.LIC8(), false);
+    }
 
     /**
     Test case for lic1 function of Decide.java. Expected return is true,
@@ -37,6 +81,139 @@ public class DecideTest {
         assertEquals(d.lic1(), false);
     }
 
+
+    /**
+    Test for LIC9. Should return false as input data is bad
+    */
+    @Test
+    public void testLIC9_1(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 4;
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.AREA1=10;
+        assertEquals(d.LIC9(), false); //NUMPOINTS < 5.
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.C_PTS = 0;
+        assertEquals(d.LIC9(), false);//1 ≤ C_PTS
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 0;
+        assertEquals(d.LIC9(), false);//1 ≤ D_PTS
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.D_PTS = 2;
+        assertEquals(d.LIC9(), false);//E PTS+F PTS ≤ NUMPOINTS−3
+    }
+
+    /**
+    Test for LIC9. Expected result true and false since espilon changes to large number
+    */
+    @Test
+    public void testLIC9_2(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.EPSILON = 1;
+        d.X = new double[]{0,0,0,0,10};
+        d.Y = new double[]{10,0,0,0,0};
+        assertEquals(d.LIC9(), true);
+        d.PARAMETERS.EPSILON = 10;
+        assertEquals(d.LIC9(), false);
+    }
+
+    /**
+    Test for LIC9. Expected result true,false,true since C_PTS and D_PTS change accordingly
+    */
+    @Test
+    public void testLIC9_3(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 10;
+        d.PARAMETERS.C_PTS = 2;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.EPSILON = 1;
+        d.X = new double[]{1,0,1,1,0,1,10,1,1,1};
+        d.Y = new double[]{1,10,1,1,0,1,0,1,1,1};
+        assertEquals(d.LIC9(), true);
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 2;
+        d.X = new double[]{1,0,1,0,1,1,10,1,1,1};
+        d.Y = new double[]{1,10,1,0,1,1,0,1,1,1};
+        assertEquals(d.LIC9(), true);
+    }
+
+    /**
+    Test for LIC9. Expected result true as angle is PI radians and epsilon is zero
+    */
+    @Test
+    public void testLIC9_4(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.C_PTS = 1;
+        d.PARAMETERS.D_PTS = 1;
+        d.PARAMETERS.EPSILON = 0;
+        d.X = new double[]{0,0,10,0,20};
+        d.Y = new double[]{0,0,0,0,0};
+        assertEquals(d.LIC9(), true);
+    }
+
+    /**
+    Test the method pointDist
+    */
+    @Test
+    public void testPointDist(){
+        Decide d = new Decide();
+        d.X = new double[]{0,1};
+        d.Y = new double[]{0,0};
+        assertEquals(d.PointDist(0,1), 1, 0.0001);
+        d.X = new double[]{0,1};
+        d.Y = new double[]{0,1};
+        assertEquals(d.PointDist(0,1), Math.sqrt(2), 0.0001);
+        d.X = new double[]{0,5,45};
+        d.Y = new double[]{0,6,0};
+        assertEquals(d.PointDist(0,2), 45, 0.0001);
+    }
+
+    /**
+    Test for lic6(). In the first case the furthest point is (1,-2) and the line
+    from (-1,3) to (3,2), in which the point is approximately 4.3 units away.
+    The second case has the two point 2 and 4 units from the line respectively,
+    neither being greater than DIST.
+    */
+    @Test
+    public void testLIC6_1() {
+        Decide d = new Decide();
+        d.NUMPOINTS = 10;
+        d.PARAMETERS.N_PTS = 3;
+        d.X = new double[]{0,2,4,1,3,1.5,-2,-1,1,3};
+        d.Y = new double[]{0,2,0,2,1,-1,2,3,-2,2};
+        d.PARAMETERS.DIST = 3;
+        assertEquals(d.lic6(), true);
+
+        d.NUMPOINTS = 4;
+        d.PARAMETERS.N_PTS = 4;
+        d.X = new double[]{0,3,1,4};
+        d.Y = new double[]{0,2,4,0};
+        d.PARAMETERS.DIST = 4;
+        assertEquals(d.lic6(), false);
+    }
+
+    /**
+    Test case for when the projection of the furthest point is further than
+    either of the two end points. The shortest distance to the line created
+    would be 2, while the distance to the end point, which is sough after,
+    is sqrt(5)
+    */
+    @Test
+    public void testLIC6_2() {
+        Decide d = new Decide();
+        d.NUMPOINTS = 3;
+        d.PARAMETERS.N_PTS = 3;
+        d.X = new double[]{0,-1,4};
+        d.Y = new double[]{0,2,0};
+        d.PARAMETERS.DIST = 2;
+        assertEquals(d.lic6(), true);
+    }
+    
     /**
     Test for LIC 13. First case should result in true, as the radius 15 is too small, whereas
     20 is enough to cover a set of three points.
@@ -66,6 +243,34 @@ public class DecideTest {
     @Test
     public void testTrue() {
         assertEquals(true, true);
+    }
+
+    @Test
+    public void testLIC3(){
+        Decide system = new Decide();
+        // Test with fewer than 3 points which can't produce a triangle (false)
+        system.NUMPOINTS = 2;
+        system.X = new double[] {0, 3};
+        system.Y = new double[] {3, 4};
+        assertEquals(system.LIC3(), false);
+
+        // Test with area less than AREA1 (200 square units), should be false.
+        system.NUMPOINTS = 3;
+        system.X = new double[] {0, 3, 3};
+        system.Y = new double[] {0, 0, 4};
+        assertEquals(system.LIC3(), false);
+
+        // Test with area more than AREA1, should be true.
+        system.NUMPOINTS = 4;
+        system.X = new double[] {-1, 0, 21, 21};
+        system.Y = new double[] {-1, 0, 0, 21};
+        assertEquals(system.LIC3(), true);
+
+        // NUMPOINTS doesn't correspond with the actual number of points, should be false.
+        system.NUMPOINTS = 3;
+        system.X = new double[] {-1, 0, 21, 21};
+        system.Y = new double[] {-1, 0, 0, 21};
+        assertEquals(system.LIC3(), false);
     }
 
     /**
@@ -219,18 +424,142 @@ public class DecideTest {
 
 
     // Test of the LIC number 11 in a case where the condition should not be triggered (false)
-
         system.NUMPOINTS = 5;
         system.X = new double[] {0, 20, 30, 40, 50};
         system.Y = new double[] {1, 10, 3, 0, 0};
         assertEquals(system.LIC11(), false);
 
     // Test of the LIC number 11 in a case where NUMPOINTS < 3 (false)
-    
-	system.NUMPOINTS = 3;
+
+        system.NUMPOINTS = 3;
         system.X = new double[] {0, 20, 30};
         system.Y = new double[] {1, 10, 3};
         assertEquals(system.LIC11(), false);
+    }
+
+    @Test
+    /**
+    Test case for LIC2 function of Decide.java. This test case evaluates
+    whether LIC2 returns true if the angle is close to 0 or close to 2*PI
+    and whether it returns false if the angle is PI 
+    */
+    public void testLIC2(){
+        Decide decide = new Decide();
+        decide.NUMPOINTS = 3;
+
+        // points will give an angle that is close to 0
+        decide.X = new double[]{3,0,1};
+        decide.Y = new double[]{7,0,5};
+        assertEquals(decide.LIC2(),true);
+
+        // points will give an angle that is close to 2*PI
+        decide.X = new double[]{1,0,3};
+        decide.Y = new double[]{5,0,7};
+        assertEquals(decide.LIC2(),true);
+
+        // points will give an angle of PI
+        decide.X = new double[]{1,0,-1};
+        decide.Y = new double[]{0,0,0};
+        assertEquals(decide.LIC2(),false);
+    }
+
+    /**
+    Test case for computeLAUNCH function of Decide.java. This case evaluates
+    two scenarios. First, there is a case where all entries of FUV are true
+    and therefore LAUNCH should also be true. In the second case, one entry
+    (in this case the fourth entry) of FUV is set to false and therefore
+    LAUNCH should alse be false.
+    */
+    @Test
+    public void testComputeLAUNCH(){
+        Decide decide = new Decide();
+
+        // test if all entries of FUV are true
+        for(int i = 0; i < 15; i++){
+            decide.FUV[i] = true;
+        }
+        decide.computeLAUNCH();
+        assertEquals(decide.LAUNCH, true);
+
+        // test if not all entries of FUV are true
+        decide.FUV[4] = false;
+        decide.computeLAUNCH();
+        assertEquals(decide.LAUNCH, false);
+    }
+
+    @Test
+    public void testLIC5() {
+    // Test of the LIC number 5 in a case where the condition should be triggered (true)
+        Decide system = new Decide();
+        system.NUMPOINTS = 5;
+        system.X = new double[] {0, 20, 2, 0, 102};
+        system.Y = new double[] {1, 10, 3, 0, 0};
+        assertEquals(system.LIC5(), true);
+
+
+    // Test of the LIC number 5 in a case where the condition should not be triggered (false)
+
+        system.NUMPOINTS = 5;
+        system.X = new double[] {0, 20, 30, 40, 50};
+        system.Y = new double[] {1, 10, 3, 0, 0};
+        assertEquals(system.LIC5(), false);
+    }
+    
+    /**
+    Test cases for LIC number 12. One test where the condition is fullfil and two where it's not
+    */
+    @Test
+    public void testLIC12() {
+    // Test of the LIC number 12 in a case where the condition should be triggered 
+    // (true with LENGTH1 = 100  and LENGTH2 = 150)
+        Decide system = new Decide();
+        system.NUMPOINTS = 5;
+	system.PARAMETERS.K_PTS = 3;
+        system.X = new double[] {0, 20, 2, 0, 102};
+        system.Y = new double[] {0, 10, 3, 1, 0};
+        assertEquals(system.LIC12(), true);
+
+
+    // Test of the LIC number 12 in a case where the condition should not be triggered 
+    // (false because 12 is not greater than LENGTH1)
+
+        system.NUMPOINTS = 5;
+        system.X = new double[] {0, 20, 2, 0, 12};
+        system.Y = new double[] {0, 10, 3, 1, 0};
+        assertEquals(system.LIC12(), false);
+
+    // Test of the LIC number 12 in a case where the condition should not be triggered 
+    // (false because 1200 is not smaller than LENGTH2)
+
+        system.NUMPOINTS = 5;
+        system.X = new double[] {0, 20, 2, 0, 1200};
+        system.Y = new double[] {0, 10, 3, 1, 0};
+        assertEquals(system.LIC12(), false);
+
+    }
+
+
+    /**
+    Test cases for LIC number 7. One test where the condition is fullfil and another where it's not
+    */
+    @Test
+    public void testLIC7() {
+    // Test of the LIC number 7 in a case where the condition should be triggered 
+    // (true with LENGTH1 = 100)
+        Decide system = new Decide();
+        system.NUMPOINTS = 5;
+	    system.PARAMETERS.K_PTS = 3;
+        system.X = new double[] {0, 20, 2, 0, 102};
+        system.Y = new double[] {1, 10, 3, 0, 0};
+        assertEquals(system.LIC7(), true);
+
+
+    // Test of the LIC number 0 in a case where the condition should not be triggered (false)
+
+        system.NUMPOINTS = 5;
+        system.X = new double[] {0, 20, 2, 0, 12};
+        system.Y = new double[] {1, 10, 3, 0, 0};
+        assertEquals(system.LIC7(), false);
     }
 
 }
