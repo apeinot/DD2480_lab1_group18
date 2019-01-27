@@ -868,13 +868,13 @@ public class DecideTest {
 
         // first test case should lead to LAUNCH being set to true
         decide.decide();
-        //assertEquals(decide.LAUNCH, true);
+        assertEquals(decide.LAUNCH, true);
 
         // second test case should lead to LAUNCH being set to true
         decide.LCM[2][3] = "ANDD";
         decide.LCM[3][2] = "ANDD";
         decide.decide();
-        //assertEquals(decide.LAUNCH, false);
+        assertEquals(decide.LAUNCH, false);
 
 
         // first and second test case MISSING

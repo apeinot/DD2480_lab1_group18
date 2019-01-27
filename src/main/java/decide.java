@@ -726,7 +726,7 @@ class Decide {
 	*/
     public void decide(){
 		// call the functions the compute the vectors/matrices
-		//computeCMV() is MISSING
+		computeCMV();
 		computePUM();
 		computeFUV();
 		computeLAUNCH();
