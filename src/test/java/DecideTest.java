@@ -240,9 +240,166 @@ public class DecideTest {
         assertEquals(d.lic13(), false);
     }
 
+    /**
+    Test for LIC14. Should return false as input data is bad
+    */
+    @Test
+    public void testLIC14_1(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 4;
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=10;
+        d.PARAMETERS.AREA2=10;
+        assertEquals(d.LIC14(), false); //Violates 5 ≤ NUMPOINTS.
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.E_PTS = 0;
+        assertEquals(d.LIC14(), false);//Violates 1 ≤ E_PTS
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 0;
+        assertEquals(d.LIC14(), false);//Violates 1 ≤ F_PTS
+        d.PARAMETERS.F_PTS = 2;
+        assertEquals(d.LIC14(), false);//Violates E PTS+F PTS ≤ NUMPOINTS−3
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA2 = -1;
+        assertEquals(d.LIC14(), false);//Violates 0 ≤ AREA2
+    }
+
+    /**
+    Test for LIC14 should return false, true, false as area 1 and 2 changes accordingly
+    */
+    @Test
+    public void testLIC14_2(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 5;
+        d.X = new double[]{0, 0, 10, 0, 10};//A triangle of area 50
+        d.Y = new double[]{0, 0, 0, 0, 10};
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=49;
+        d.PARAMETERS.AREA2=50;
+        assertEquals(d.LIC14(), false); //No triangle is *smaller* than 50.
+        d.PARAMETERS.AREA2=51;
+        assertEquals(d.LIC14(), true);
+        d.PARAMETERS.AREA1=50;
+        assertEquals(d.LIC14(), false); //No triangle is *greater* than 50*
+    }
+
+    /**
+    Test for LIC14 should return true, false, testTrue as we edit area 1 and 2 accordingly.
+    */
+    @Test
+    public void testLIC14_3(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 6;
+        d.X = new double[]{0, 0, 5, 2, 5, 2};//One 5x5 right triangle one 2x2 right triangle
+        d.Y = new double[]{0, 0, 0, 0, 5, 2};
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=12; //5x5/2 should be bigger
+        d.PARAMETERS.AREA2=3; //2x2/2 should be smaller
+        assertEquals(d.LIC14(), true);
+        d.X = new double[]{0, 0, 5, 2, 5, 2};//One 5x5 right triangle one 2x3 right triangle
+        d.Y = new double[]{0, 0, 0, 0, 5, 3};
+        assertEquals(d.LIC14(), false); //2x3/2 = 3 which is not smaller than 3
+        d.PARAMETERS.AREA2=4; //2x3/2 should be smaller
+        assertEquals(d.LIC14(), true); //2x3/2 = 3 which is not smaller than 3
+    }
+
     @Test
     public void testTrue() {
         assertEquals(true, true);
+    }
+
+    /**
+    Test case for LIC4 function of Decide.java. Expected return is true,
+    as there is one point in each quadrant
+    */
+    @Test
+    public void testLIC4_1() {
+        Decide d = new Decide();
+        d.NUMPOINTS = 4;
+        d.PARAMETERS.Q_PTS = 4;
+        d.X = new double[]{1.0,-1.0,1.0,-1.0};
+        d.Y = new double[]{1.0,1.0,-1.0,-1.0};
+        d.PARAMETERS.QUADS=1;
+        assertEquals(d.LIC4(), true);
+        d.PARAMETERS.QUADS=2;
+        assertEquals(d.LIC4(), true);
+        d.PARAMETERS.QUADS=3;
+        assertEquals(d.LIC4(), true);
+    }
+
+    /**
+    Test case for LIC4 function of Decide.java. Expected return is true,true,false,
+    as there is one point in each quadrant save for one.
+    */
+    @Test
+    public void testLIC4_2() {
+        Decide d = new Decide();
+        d.NUMPOINTS = 3;
+        d.PARAMETERS.Q_PTS = 3;
+        d.X = new double[]{1.0,-1.0,1.0};
+        d.Y = new double[]{1.0,1.0,-1.0};
+        d.PARAMETERS.QUADS=1;
+        assertEquals(d.LIC4(), true);
+        d.PARAMETERS.QUADS=2;
+        assertEquals(d.LIC4(), true);
+        d.PARAMETERS.QUADS=3;
+        assertEquals(d.LIC4(), false);
+    }
+
+    /**
+    Test case for LIC4 function of Decide.java. Expected return is false,false,false,false
+    as the input data is bad.
+    */
+    @Test
+    public void testLIC4_3() {
+        Decide d = new Decide();
+        d.NUMPOINTS = 3;
+        d.PARAMETERS.Q_PTS = 3;
+        d.X = new double[]{1.0,-1.0,1.0};
+        d.Y = new double[]{1.0,1.0,-1.0};
+        d.PARAMETERS.QUADS=0;
+        assertEquals(d.LIC4(), false);
+        d.PARAMETERS.QUADS=4;
+        assertEquals(d.LIC4(), false);
+        d.PARAMETERS.QUADS=3;
+        d.PARAMETERS.Q_PTS = 0;
+        assertEquals(d.LIC4(), false);
+        d.PARAMETERS.Q_PTS = 4;
+        assertEquals(d.LIC4(), false);
+    }
+
+    /**
+    Test case for LIC4 function of Decide.java. Expected return is false,true
+    as there is several nodes in one quadrant and one in another.
+    */
+    @Test
+    public void testLIC4_4() {
+        Decide d = new Decide();
+        d.NUMPOINTS = 10;
+        d.X = new double[]{1.0,1.0,1.0,1.0,-1.0,1.0,1.0,1.0,1.0,1.0};
+        d.Y = new double[]{1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0};
+        d.PARAMETERS.QUADS=2;
+        d.PARAMETERS.Q_PTS=2;
+        assertEquals(d.LIC4(), false);
+        d.PARAMETERS.QUADS=1;
+        assertEquals(d.LIC4(), true);
+    }
+
+    /**
+    Test case for LIC4s quadrant helper function function of Decide.java. Expected return is 0,0,0,1,2,
+    as the points are on the axis lines which fall under specific rules, see decide.java.
+    */
+    @Test
+    public void testLIC4QuadrantHelper() {
+        Decide d = new Decide();
+        assertEquals(d.LIC4QuadrantHelper(0.0,0.0), 0);
+        assertEquals(d.LIC4QuadrantHelper(1.0,0.0), 0);
+        assertEquals(d.LIC4QuadrantHelper(0.0,1.0), 0);
+        assertEquals(d.LIC4QuadrantHelper(-1.0,0.0), 1);
+        assertEquals(d.LIC4QuadrantHelper(0.0,-1.0), 2);
     }
 
     @Test
@@ -407,6 +564,147 @@ public class DecideTest {
         system.X = new double[] {0, 20, 2, 0, 12};
         system.Y = new double[] {1, 10, 3, 0, 0};
         assertEquals(system.LIC0(), false);
+    }
+
+    @Test
+    public void testLIC10(){
+        Decide system = new Decide();
+        /*
+        Test with area less than AREA1 (200 square units), should be false.
+        The triangle points are (0,0), (3,0) and (3,4), which creates a
+        triangle with an area of 6 square units. Separated by (E_PTS = 6) and
+        (F_PTS = 9) points.
+        */
+        system.NUMPOINTS = 18;
+        system.X = new double[] {0,   1,2,3,4,5,6,   3,   1,2,3,4,5,6,7,8,9,   3};
+        system.Y = new double[] {0,   1,2,3,4,5,6,   0,   1,2,3,4,5,6,7,8,9,   4};
+        assertEquals(system.LIC10(), false);
+
+        /*
+        Test with area more than AREA1, should be true. The triangle is (0,0),
+        (21,0) and (21,21) which creates a triangle of 220.5 square units. This
+        is greater than AREA1 (220 square units).
+        */
+        system.NUMPOINTS = 18;
+        system.PARAMETERS.AREA1 = 220;
+        system.X = new double[] {0,   1,2,3,4,5,6,   21,   1,2,3,4,5,6,7,8,9,   21};
+        system.Y = new double[] {0,   1,2,3,4,5,6,   0,   1,2,3,4,5,6,7,8,9,   21};
+        assertEquals(system.LIC10(), true);
+
+        // Now the area is higher than that of the triangle, so this should be false.
+        system.PARAMETERS.AREA1 = 221;
+        assertEquals(system.LIC10(), false);
+
+        // Not enough points, should be false. E_PTS + F_PTS = 6 + 9 = 15 > NUMPOINTS - 3 = 14.
+        system.NUMPOINTS = 17;
+        system.PARAMETERS.AREA1 = 200;
+        system.X = new double[] {0,   1,2,3,4,5,6,   21,   1,2,3,4,5,6,7,8,   21};
+        system.Y = new double[] {0,   1,2,3,4,5,6,   0,   1,2,3,4,5,6,7,8,   21};
+        assertEquals(system.LIC10(), false);
+    }
+
+    /**
+    Test for LIC10. Should return false as input data is bad
+    */
+    @Test
+    public void testLIC10_1(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 4;
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=10;
+        assertEquals(d.LIC10(), false); //NUMPOINTS < 5.
+        d.NUMPOINTS = 5;
+        d.PARAMETERS.E_PTS = 0;
+        assertEquals(d.LIC10(), false);//1 ≤ E_PTS
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 0;
+        assertEquals(d.LIC10(), false);//1 ≤ F_PTS
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.F_PTS = 2;
+        assertEquals(d.LIC10(), false);//E PTS+F PTS ≤ NUMPOINTS−3
+    }
+
+    /**
+    Test for LIC10. Should return true and false since area will be 50
+    */
+    @Test
+    public void testLIC10_2(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 5;
+        d.X = new double[]{0, 0, 10, 0, 10};
+        d.Y = new double[]{0, 0, 0, 0, 10};
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=49;
+        assertEquals(d.LIC10(), true);
+        d.PARAMETERS.AREA1=50;
+        assertEquals(d.LIC10(), false);
+    }
+
+    /**
+    Test for LIC10. Should return true,false,true since E_PTS and F_PTS change
+    accordingly.
+    */
+    @Test
+    public void testLIC10_3(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 6;
+        d.X = new double[]{0, 0, 0, 10, 0, 10};
+        d.Y = new double[]{0, 0, 0, 0, 0, 10};
+        d.PARAMETERS.E_PTS = 2;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1=49;
+        assertEquals(d.LIC10(), true);
+        d.PARAMETERS.E_PTS = 1;
+        d.PARAMETERS.F_PTS = 2;
+        assertEquals(d.LIC10(), false);
+        d.X = new double[]{0, 0, 10, 0, 0, 10};
+        d.Y = new double[]{0, 0, 0, 0, 0, 10};
+        assertEquals(d.LIC10(), true);
+    }
+
+    /**
+    Test for LIC10. Should return true (case close to the previous one).
+    */
+    @Test
+    public void testLIC10_4(){
+        Decide d = new Decide();
+        d.NUMPOINTS = 10;
+        d.X = new double[]{0, 0, 0, 0, 0, 0, 0, 10, 0, 10};
+        d.Y = new double[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 10};
+        d.PARAMETERS.E_PTS = 2;
+        d.PARAMETERS.F_PTS = 1;
+        d.PARAMETERS.AREA1 = 49;
+        assertEquals(d.LIC10(), true);
+    }
+
+    /**
+    Test case for LIC 11. First case should result in true. Other cases should result in false
+    */
+    @Test
+    public void testLIC11() {
+    // Test of the LIC number 11 in a case where the condition should be triggered (true)
+        Decide system = new Decide();
+	system.PARAMETERS.G_PTS = 3;
+        system.NUMPOINTS = 5;
+        system.X = new double[] {200, 20, 2, 0, 102};
+        system.Y = new double[] {1, 10, 3, 0, 0};
+        assertEquals(system.LIC11(), true);
+
+
+    // Test of the LIC number 11 in a case where the condition should not be triggered (false)
+        system.NUMPOINTS = 5;
+        system.X = new double[] {0, 20, 30, 40, 50};
+        system.Y = new double[] {1, 10, 3, 0, 0};
+        assertEquals(system.LIC11(), false);
+
+    // Test of the LIC number 11 in a case where NUMPOINTS < 3 (false)
+
+        system.NUMPOINTS = 3;
+        system.X = new double[] {0, 20, 30};
+        system.Y = new double[] {1, 10, 3};
+        assertEquals(system.LIC11(), false);
     }
 
     @Test
@@ -594,6 +892,31 @@ public class DecideTest {
         }
         decide.decide();
         assertEquals(decide.LAUNCH, true);
+    }
+    
+    /**
+    Test case for computeCMV function of Decide.java. This case evaluates whether
+    the CMV vector is correctly set to true or false.
+    */
+    @Test
+    public void testComputeCMV(){
+        Decide system = new Decide();
+        system.NUMPOINTS = 8;
+	    system.PARAMETERS.K_PTS = 3;
+        system.X = new double[] {0, 20, 2, 0, 102, 1, 0, 3};
+        system.Y = new double[] {1, 10, 3, 0, 0, 5, 0, 7};
+        system.computeCMV();
+        // Test of the LIC number 7 in a case where the condition should be triggered 
+        // (true with LENGTH1 = 100; because the distance is greater obviously)
+        assertEquals(system.CMV[7], true);
+        // x value of second point is greater than the x value of the third point
+        assertEquals(system.CMV[5], true);
+        // last three points give an angle close to 2*PI
+        assertEquals(system.CMV[2], true);
+        system.PARAMETERS.K_PTS = 7;
+        system.computeCMV();
+        // first and last point do not have a distance greater than LENGTH1 = 100
+        assertEquals(system.CMV[12], false);
     }
 
 }

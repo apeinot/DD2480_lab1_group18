@@ -218,6 +218,43 @@ class Decide {
 	return r > rad;
     }
 
+    /**
+    Assess if there exists at least one set of three data points separated by
+    exactly E_PTS and F_PTS consecutive intervening points, respectively, that
+    are the vertices of a triangle with area greater than PARAMETERS.AREA1.
+    @return true if the condition described above is true, otherwise false.
+    */
+    public boolean LIC10(){
+        int E = PARAMETERS.E_PTS;
+        int F = PARAMETERS.F_PTS;
+        double AREA1 = PARAMETERS.AREA1;
+        // Requirements described in the program description
+        if(NUMPOINTS < 5 || E < 1 || F < 1 || E+F > NUMPOINTS - 3){
+			return false;
+        }
+        for(int i = 0; i+E+1+F+1 < NUMPOINTS; i++){
+            // The points of the triangle
+            double X1 = X[i],         Y1 = Y[i];
+            double X2 = X[i+E+1],     Y2 = Y[i+E+1];
+            double X3 = X[i+E+1+F+1], Y3 = Y[i+E+1+F+1];
+
+            // The three sides of the triangle
+            double a = Math.sqrt(Math.pow(X2 - X1, 2) + Math.pow(Y2 - Y1, 2));
+            double b = Math.sqrt(Math.pow(X3 - X2, 2) + Math.pow(Y3 - Y2, 2));
+            double c = Math.sqrt(Math.pow(X1 - X3, 2) + Math.pow(Y1 - Y3, 2));
+
+	    // The "semiperimeter"
+            double s = 0.5 * (a + b + c);
+
+	    // Heron's formula for calculating the triangle area
+            double area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+            if(area > AREA1){
+                return true;
+            }
+        }
+        return false;
+    }
+
 	/**
 	There exists at least one set of three data points separated by exactly C PTS and D PTS
 	consecutive intervening points, respectively, that form an angle such that:
@@ -402,6 +439,64 @@ class Decide {
 		}
 		return false;
 	}
+
+    /**
+    Checks if there exists at least one set of Q PTS consecutive data points that lie 
+    in more than QUADS quadrants. A point exactly between two quadrants is always 
+    considered a member of the quadrant of lower index.
+    */
+    public boolean LIC4(){
+        int p = PARAMETERS.Q_PTS;
+        int q = PARAMETERS.QUADS;
+        int[] pointsInQuads = {0,0,0,0}; //How many points in our consecutive intervall are in the different quadrants
+        int filledQuadrants = 0; //How many quadrant have points in them.
+        if(!(2 <= p && p <= NUMPOINTS && 1 <= q && q <= 3)){ //Parameter(s) not in domain
+            return false;
+        }
+        int quadrant;
+        for (int i = 0 ; i < NUMPOINTS ; i++) {
+            if(i >= p){ //If we have examined more than or exactly p points.
+                quadrant = LIC4QuadrantHelper(X[i-p],Y[i-p]); //Get in which quadrant the previous last of the consecutive points were.
+                pointsInQuads[quadrant]--;
+                if(pointsInQuads[quadrant] == 0){ //If that was the last point in that quadrant.
+                    filledQuadrants--;
+                }
+            }
+            quadrant = LIC4QuadrantHelper(X[i],Y[i]); //Get in which quadrant the first of the consecutive points is.
+            pointsInQuads[quadrant]++;
+            if(pointsInQuads[quadrant] == 1){ //If that quadrant was previously empty
+                filledQuadrants++;
+            }
+            if(filledQuadrants > q){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+    This method calculates to which quadrant a point belong to.
+    A point exactly between two quadrants is always considered a member of the quadrant of lower index.
+    For example (0,1) is quadrant 1, (-1,0) is quadrant 2 and (0,0) is quadrant 1
+    @param x the x coordinate
+    @param y the y coordinate
+    @return A number in the range 0 - 3 denoting quadrant.
+    */
+    public int LIC4QuadrantHelper(double x, double y){
+        if(y >= 0){ //Quadrant 1 or 2
+            if(x >= 0){
+                return 0;
+            }
+            return 1;
+        }
+        else{ //Quadrant 3 or 4
+            if(x > 0){
+                return 3;
+            }
+            return 2;
+        }
+    }
+    
     /**
     Computation of the LIC number 5
     Assess whether there exist at least one set of two consecutive data points (X[i-1], Y[i-1])
@@ -471,6 +566,25 @@ class Decide {
 	    	}
 		}
 		return false;
+    }
+
+    /**
+    Computation of the LIC number 11
+    Assess whether there exist at least one set of two data points (X[i], Y[i])
+    and (X[j], Y[j]) separated by G_PTS consectutive points which X[j]-X[i] < 0.
+    @return - true if the condition is fulfilled (otherwise False)
+    */
+    public boolean LIC11(){
+        if (NUMPOINTS < 3 || PARAMETERS.G_PTS < 1 || PARAMETERS.G_PTS > NUMPOINTS-2){
+            return false;
+        }
+        for (int i=PARAMETERS.G_PTS+1; i<NUMPOINTS; i++){
+            if (X[i]-X[i-PARAMETERS.G_PTS-1] < 0){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -546,6 +660,64 @@ class Decide {
 		return false;
 	}
 
+	/**
+	Sets the a field of the vector CMV to true if the corresponding LIC is
+	met; otherwise the field is set to false
+	*/
+	public void computeCMV(){
+		// set the values corresponding to the single LICs
+		CMV[0] = LIC0();
+		CMV[1] = lic1();
+		CMV[2] = LIC2();
+		CMV[3] = LIC3();
+		CMV[4] = LIC4();
+		CMV[5] = LIC5();
+		CMV[6] = lic6();
+		CMV[7] = LIC7();
+		CMV[8] = LIC8();
+		CMV[9] = LIC9();
+		CMV[10] = LIC10();
+		CMV[11] = LIC11();
+		CMV[12] = LIC12();
+		CMV[13] = lic13();
+		CMV[14] = LIC14();
+	}
+
+
+    /**
+	There exists at least one set of three data points, separated by exactly E PTS and F PTS con-
+	secutive intervening points, respectively, that are the vertices of a triangle with area greater
+
+	than AREA1. In addition, there exist three data points (which can be the same or different
+
+	from the three data points just mentioned) separated by exactly E PTS and F PTS consec-
+	utive intervening points, respectively, that are the vertices of a triangle with area less than
+
+	AREA2. Both parts must be true for the LIC to be true. The condition is not met when
+	NUMPOINTS < 5.
+	0 ≤ AREA2
+	Must be true:
+	1 ≤ E_PTS, 1 ≤ F_PTS		|Theese two are not a part of lab instructions.
+	E PTS+F PTS ≤ NUMPOINTS−3	|I just assumed they were.
+	*/
+	public boolean LIC14(){
+		int e = PARAMETERS.E_PTS;
+		int f = PARAMETERS.F_PTS;
+		if(NUMPOINTS < 5 || PARAMETERS.AREA2 < 0 || !(1 <= e && 1 <= f && e+f <= NUMPOINTS-3)){ //Bad input data
+			return false;
+		}
+		int B = e+1;
+		int C = B+f+1;
+		double area;
+		boolean GT = false; //Greater than. This indicates if we found an area that is greater than AREA1
+		boolean LT = false; //Lesser than. This indicates if we found an area that is lesser than AREA2
+		for (int A = 0; C < NUMPOINTS ; A++, B++, C++) {
+			area = Math.abs(X[A]*(Y[B] - Y[C]) + X[B]*(Y[C] - Y[A]) + X[C]*(Y[A] - Y[B]))/2; //coordinate geometry formula for area
+			GT = GT ? GT : area > PARAMETERS.AREA1;//IF GT/LT is already set, do nothing.
+			LT = LT ? LT : area < PARAMETERS.AREA2;//Else set GT/LT to GT/LT comparison.
+		}
+		return GT&&LT;
+	}
 
 	/**
 	Implements the entire DECIDE process. This function requires all input
