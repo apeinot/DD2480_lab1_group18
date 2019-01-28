@@ -53,7 +53,7 @@ public class DecideTest {
     }
 
     /**
-    Test case for lic1 function of Decide.java. Expected return is true,
+    Test case for LIC1 function of Decide.java. Expected return is true,
     as the required radius to form a circle around (0,0), (30,0), (0,16) is
     greater than 15.
     */
@@ -64,7 +64,7 @@ public class DecideTest {
         d.X = new double[]{0,30,0,1,10};
         d.Y = new double[]{0,0,16,13,8};
         d.PARAMETERS.RADIUS1=15;
-        assertEquals(d.lic1(), true);
+        assertEquals(d.LIC1(), true);
     }
 
     /**
@@ -78,7 +78,7 @@ public class DecideTest {
         d.X = new double[]{17, 17, 22, 13, 0};
         d.Y = new double[]{23, -7, 12, 15, 10};
         d.PARAMETERS.RADIUS1=15;
-        assertEquals(d.lic1(), false);
+        assertEquals(d.LIC1(), false);
     }
 
 
@@ -174,7 +174,7 @@ public class DecideTest {
     }
 
     /**
-    Test for lic6(). In the first case the furthest point is (1,-2) and the line
+    Test for LIC6(). In the first case the furthest point is (1,-2) and the line
     from (-1,3) to (3,2), in which the point is approximately 4.3 units away.
     The second case has the two point 2 and 4 units from the line respectively,
     neither being greater than DIST.
@@ -187,14 +187,14 @@ public class DecideTest {
         d.X = new double[]{0,2,4,1,3,1.5,-2,-1,1,3};
         d.Y = new double[]{0,2,0,2,1,-1,2,3,-2,2};
         d.PARAMETERS.DIST = 3;
-        assertEquals(d.lic6(), true);
+        assertEquals(d.LIC6(), true);
 
         d.NUMPOINTS = 4;
         d.PARAMETERS.N_PTS = 4;
         d.X = new double[]{0,3,1,4};
         d.Y = new double[]{0,2,4,0};
         d.PARAMETERS.DIST = 4;
-        assertEquals(d.lic6(), false);
+        assertEquals(d.LIC6(), false);
     }
 
     /**
@@ -211,7 +211,7 @@ public class DecideTest {
         d.X = new double[]{0,-1,4};
         d.Y = new double[]{0,2,0};
         d.PARAMETERS.DIST = 2;
-        assertEquals(d.lic6(), true);
+        assertEquals(d.LIC6(), true);
     }
     
     /**
@@ -228,7 +228,7 @@ public class DecideTest {
         d.PARAMETERS.B_PTS = 1;
         d.PARAMETERS.RADIUS1=15;
         d.PARAMETERS.RADIUS2=20;
-        assertEquals(d.lic13(), true);
+        assertEquals(d.LIC13(), true);
 
         d.NUMPOINTS = 7;
         d.X = new double[]{0,-10,30,29,13,40,2};
@@ -237,7 +237,7 @@ public class DecideTest {
         d.PARAMETERS.B_PTS = 1;
         d.PARAMETERS.RADIUS1=15;
         d.PARAMETERS.RADIUS2=20;
-        assertEquals(d.lic13(), false);
+        assertEquals(d.LIC13(), false);
     }
 
     /**
