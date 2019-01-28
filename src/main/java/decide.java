@@ -355,10 +355,10 @@ class Decide {
     */
     public boolean LIC5(){
         for (int i=1; i<NUMPOINTS; i++){
-                if (X[i]-X[i-1] < 0){
-                                return true;
-                }
-                }
+            if (X[i]-X[i-1] < 0){
+                return true;
+            }
+        }
 
         return false;
     }
@@ -465,7 +465,7 @@ class Decide {
     @return true if three such points are found, otherwise false
     */
     public boolean LIC8(){
-                int A_PTS = PARAMETERS.A_PTS;
+        int A_PTS = PARAMETERS.A_PTS;
         int B_PTS = PARAMETERS.B_PTS;
         // Checking LIC requirements from the instructions
         if(NUMPOINTS < 5 || A_PTS < 1 || B_PTS < 1 ||
@@ -485,9 +485,9 @@ class Decide {
             boolean res = LIC1Calculator(rad, x, y);
             if (res) {
                 return res;
-                }
-                }
-                return false;
+            }
+        }
+        return false;
     }
 
     /**
