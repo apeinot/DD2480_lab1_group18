@@ -32,7 +32,7 @@ There is currently no other way of running the project, apart from manually exec
 ### Platform and dependencies
 
 *Platform*  
-The project as been tested under Java 8 (other versions may also work).
+The project as been tested under Java 8 and 10 (other versions may also work).
 
 *Dependencies*  
 * ANT is needed to build the project ([APACHE ANT documentation](https://ant.apache.org/manual/))
