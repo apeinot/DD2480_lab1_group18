@@ -21,8 +21,6 @@ Position i in the vector is true if either the corresponding element in a _preli
 is false or if all elements the i:th row in the *PUM* is true.
 If all elements of the *FUV* are true LAUNCH is set to true.
 
-
-
 ## Running the project
 
 For running and testing see *Compilation, running and testing*.
@@ -42,9 +40,13 @@ The project as been tested under Java 8 and 10 (other versions may also work).
 
 In a terminal (in the root folder of the project), run `ant test` to compile and run the test of the project as described in the [build.xml](build.xml) file.
 
+When testing, we tried to create tests which satisfy all of the edge cases. Every LIC function was accompanied with at least two tests, one true and one false. We tried to create more complex input data and not just the bare minimum.
+
 ## Statement of contributions
 
 (Each function addition is coupled with the corresponding testing)
+
+Every commit either referenced an issue directly in the commit message title or body (e.g. "This function solves #5"), or the commit was pushed on a branch which directly references a specific issue (e.g. a branch might be named "issue15" or "issue20").
 
 * **Alexandre**
   * Creation of the repository
